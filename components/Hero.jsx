@@ -5,7 +5,6 @@ import Image from 'next/image';
 
 import RotatingWord, { TIER_ACCENT_HEX } from './RotatingWord';
 import CardCarouselBackground from './CardCarouselBackground';
-import GlareHover from './GlareHover';
 import LoaderOrb from './LoaderOrb';
 
 import { arcLetterStyle } from '@/lib/textCurve';
@@ -17,9 +16,24 @@ const STATIC_WORD = 'Websites';
    ============================================================= */
 
 function getArcAmplitude(width) {
-  if (width < 640) return { depth: 18, rotation: 4.5 };
-  if (width < 1024) return { depth: 26, rotation: 5 };
-  return { depth: 40, rotation: 5.5 };
+  if (width < 640) {
+    return {
+      depth: 18,
+      rotation: 4.5,
+    };
+  }
+
+  if (width < 1024) {
+    return {
+      depth: 26,
+      rotation: 5,
+    };
+  }
+
+  return {
+    depth: 40,
+    rotation: 5.5,
+  };
 }
 
 /* =============================================================
@@ -27,21 +41,32 @@ function getArcAmplitude(width) {
    ============================================================= */
 
 function footArcStyle(index, total) {
-  if (total <= 1) return { display: 'inline-block' };
+  if (total <= 1) {
+    return {
+      display: 'inline-block',
+    };
+  }
 
   const progress = index / (total - 1);
   const centered = progress - 0.5;
 
   const rotate = centered * 9;
-  const lift = Math.cos(centered * Math.PI) * 4.5;
+  const lift =
+    Math.cos(centered * Math.PI) * 4.5;
 
   return {
     display: 'inline-block',
-    transform: `translateY(${-lift}px) rotate(${rotate}deg)`,
+    transform: `
+      translateY(${-lift}px)
+      rotate(${rotate}deg)
+    `,
   };
 }
 
-function ArcLabel({ text, delayBase = 0 }) {
+function ArcLabel({
+  text,
+  delayBase = 0,
+}) {
   const chars = text.split('');
 
   return (
@@ -49,7 +74,10 @@ function ArcLabel({ text, delayBase = 0 }) {
       {chars.map((char, i) => (
         <span
           key={`${text}-${i}`}
-          style={footArcStyle(i, chars.length)}
+          style={footArcStyle(
+            i,
+            chars.length
+          )}
         >
           <span
             className="foot-letter inline-block"
@@ -57,7 +85,9 @@ function ArcLabel({ text, delayBase = 0 }) {
               animationDelay: `${delayBase + i * 16}ms`,
             }}
           >
-            {char === ' ' ? '\u00A0' : char}
+            {char === ' '
+              ? '\u00A0'
+              : char}
           </span>
         </span>
       ))}
@@ -65,46 +95,74 @@ function ArcLabel({ text, delayBase = 0 }) {
   );
 }
 
-export default function Hero() {
-  const [rotatingWordLen, setRotatingWordLen] = useState(5);
+/* =============================================================
+   HERO
+   ============================================================= */
 
-  const [accentColor, setAccentColor] = useState(
-    TIER_ACCENT_HEX.Basic
+export default function Hero() {
+  const [rotatingWordLen, setRotatingWordLen] =
+    useState(5);
+
+  const [accentColor, setAccentColor] =
+    useState(TIER_ACCENT_HEX.Basic);
+
+  const [arcAmplitude, setArcAmplitude] =
+    useState({
+      depth: 40,
+      rotation: 5.5,
+    });
+
+  /* =============================================================
+     ROTATING WORD
+     ============================================================= */
+
+  const handleWordChange = useCallback(
+    (word) => {
+      setRotatingWordLen(word.length);
+
+      setAccentColor(
+        TIER_ACCENT_HEX[word] ??
+          TIER_ACCENT_HEX.Basic
+      );
+    },
+    []
   );
 
-  const [arcAmplitude, setArcAmplitude] = useState({
-    depth: 40,
-    rotation: 5.5,
-  });
-
-  const handleWordChange = useCallback((word) => {
-    setRotatingWordLen(word.length);
-
-    setAccentColor(
-      TIER_ACCENT_HEX[word] ?? TIER_ACCENT_HEX.Basic
-    );
-  }, []);
+  /* =============================================================
+     RESPONSIVE ARC
+     ============================================================= */
 
   useEffect(() => {
     const measure = () => {
       setArcAmplitude(
-        getArcAmplitude(window.innerWidth)
+        getArcAmplitude(
+          window.innerWidth
+        )
       );
     };
 
     measure();
 
-    window.addEventListener('resize', measure, {
-      passive: true,
-    });
+    window.addEventListener(
+      'resize',
+      measure,
+      {
+        passive: true,
+      }
+    );
 
     return () => {
-      window.removeEventListener('resize', measure);
+      window.removeEventListener(
+        'resize',
+        measure
+      );
     };
   }, []);
 
   const totalLetters =
-    rotatingWordLen + 1 + STATIC_WORD.length;
+    rotatingWordLen +
+    1 +
+    STATIC_WORD.length;
 
   const staticStartIndex =
     rotatingWordLen + 1;
@@ -112,21 +170,34 @@ export default function Hero() {
   return (
     <section
       className="
-    hero-section
-    relative
-    flex
-    min-h-0
-    md:min-h-[100svh]
-    flex-col
-    overflow-hidden
-    pt-24
-    sm:pt-28
-  "
+        hero-section
+        relative
+        flex
+        min-h-0
+        flex-col
+        overflow-hidden
+        pt-24
+
+        sm:pt-28
+
+        md:min-h-[100svh]
+      "
     >
       {/* =========================================================
           AMBIENT DEPTH
           ========================================================= */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          inset-0
+          z-0
+          overflow-hidden
+        "
+      >
+        {/* Left warm glow */}
+
         <div
           className="
             blob-drift-a
@@ -144,6 +215,8 @@ export default function Hero() {
           "
         />
 
+        {/* Right cool glow */}
+
         <div
           className="
             blob-drift-b
@@ -160,34 +233,74 @@ export default function Hero() {
             blur-3xl
           "
         />
+
+        {/* Very subtle center atmosphere */}
+
+        <div
+          className="
+            absolute
+            left-1/2
+            top-[38%]
+            h-[280px]
+            w-[520px]
+            -translate-x-1/2
+            rounded-full
+            bg-white/15
+            blur-[100px]
+          "
+        />
       </div>
 
       {/* =========================================================
           CAROUSEL BACKGROUND
+
+          DESKTOP:
+          - More vertical room
+          - Phones no longer cut at bottom
+          - Wide composition
+          - Sits below headline
+
+          MOBILE:
+          Existing responsive structure preserved.
           ========================================================= */}
+
       <div
         className="
           pointer-events-none
           absolute
           inset-x-0
-          top-10
+          top-[145px]
           z-0
-          h-[360px]
+          h-[330px]
+          origin-top
+          scale-[0.78]
 
-          sm:top-16
-          sm:h-[540px]
+          sm:top-[155px]
+          sm:h-[430px]
+          sm:scale-[0.82]
 
-          md:top-20
-          md:h-[640px]
+          md:top-[175px]
+          md:h-[560px]
+          md:scale-[0.86]
 
-          lg:h-[680px]
+          lg:top-[188px]
+          lg:h-[650px]
+          lg:scale-[0.82]
+
+          xl:top-[195px]
+          xl:h-[675px]
+          xl:scale-[0.84]
+
+          2xl:top-[198px]
+          2xl:h-[700px]
+          2xl:scale-[0.87]
         "
         style={{
           WebkitMaskImage:
-            'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+            'linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%)',
 
           maskImage:
-            'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+            'linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%)',
         }}
       >
         <CardCarouselBackground />
@@ -196,11 +309,12 @@ export default function Hero() {
       {/* =========================================================
           STATUS PILL
           ========================================================= */}
+
       <div
         className="
           hero-fade-in
           relative
-          z-10
+          z-40
           mx-auto
           mb-2
         "
@@ -218,7 +332,7 @@ export default function Hero() {
             rounded-full
             border
             border-ink/10
-            bg-paper/70
+            bg-paper/75
             px-3
             py-1
             text-[11px]
@@ -228,7 +342,14 @@ export default function Hero() {
             backdrop-blur-md
           "
         >
-          <span className="relative flex h-2 w-2">
+          <span
+            className="
+              relative
+              flex
+              h-2
+              w-2
+            "
+          >
             <span
               className="
                 absolute
@@ -260,12 +381,15 @@ export default function Hero() {
 
       {/* =========================================================
           HEADLINE
+
+          Kept ABOVE the phones.
           ========================================================= */}
+
       <div
         className="
           hero-fade-in
           relative
-          z-10
+          z-40
           mx-auto
           w-full
           max-w-6xl
@@ -300,29 +424,50 @@ export default function Hero() {
 
               md:gap-x-4
               md:text-[5rem]
+
+              lg:text-[5.2rem]
+
+              xl:text-[5.5rem]
             "
           >
             <RotatingWord
               curveTotal={totalLetters}
-              onWordChange={handleWordChange}
-              arcDepth={arcAmplitude.depth}
-              arcRotation={arcAmplitude.rotation}
+              onWordChange={
+                handleWordChange
+              }
+              arcDepth={
+                arcAmplitude.depth
+              }
+              arcRotation={
+                arcAmplitude.rotation
+              }
             />
 
-            <span className="inline-flex shrink-0">
+            <span
+              className="
+                inline-flex
+                shrink-0
+              "
+            >
               {STATIC_WORD.split('').map(
                 (char, index) => (
                   <span
                     key={`ws-${index}`}
-                    className="shrink-0"
+                    className="
+                      shrink-0
+                    "
                     style={arcLetterStyle(
-                      staticStartIndex + index,
+                      staticStartIndex +
+                        index,
                       totalLetters,
                       arcAmplitude
                     )}
                   >
                     <span
-                      className="static-shine inline-block"
+                      className="
+                        static-shine
+                        inline-block
+                      "
                       style={{
                         animationDelay: `${index * 90}ms`,
                       }}
@@ -339,12 +484,17 @@ export default function Hero() {
 
       {/* =========================================================
           CHARACTER AREA
+
+          IMPORTANT:
+          Desktop character is pushed down so its head doesn't
+          collide with the headline.
           ========================================================= */}
+
       <div
         className="
           pointer-events-none
           relative
-          z-10
+          z-30
           mx-auto
           mt-[-2px]
           flex
@@ -362,6 +512,12 @@ export default function Hero() {
           md:mt-[-18px]
           md:flex-1
           md:pb-17
+
+          lg:mt-[-10px]
+          lg:pb-6
+
+          xl:mt-[-8px]
+          xl:pb-4
         "
       >
         <div
@@ -375,35 +531,42 @@ export default function Hero() {
           "
         >
           {/* =====================================================
-              FADE-IN WRAPPER
+              FADE-IN
               ===================================================== */}
+
           <div
-            className="hero-fade-in relative"
+            className="
+              hero-fade-in
+              relative
+            "
             style={{
               animationDelay: '160ms',
             }}
           >
             {/* ===================================================
-                ACTUAL CHARACTER POSITION
+                CHARACTER POSITION
                 =================================================== */}
+
             <div
               className="
                 relative
-
                 translate-y-[10px]
 
                 sm:translate-y-[8px]
 
                 md:translate-y-[30px]
 
-                lg:translate-y-[38px]
+                lg:translate-y-[32px]
 
-                xl:translate-y-[44px]
+                xl:translate-y-[38px]
+
+                2xl:translate-y-[42px]
               "
             >
-              {/* ===============================================
+              {/* =================================================
                   CHARACTER GLOW
-                  =============================================== */}
+                  ================================================= */}
+
               <div
                 className="
                   glow-pulse
@@ -412,8 +575,8 @@ export default function Hero() {
                   left-1/2
                   top-1/2
                   z-0
-                  h-[220px]
-                  w-[220px]
+                  h-[210px]
+                  w-[210px]
                   -translate-x-1/2
                   -translate-y-1/2
                   rounded-full
@@ -423,17 +586,21 @@ export default function Hero() {
                   to-transparent
                   blur-3xl
 
-                  sm:h-[280px]
-                  sm:w-[280px]
+                  sm:h-[260px]
+                  sm:w-[260px]
 
-                  md:h-[360px]
-                  md:w-[360px]
+                  md:h-[340px]
+                  md:w-[340px]
+
+                  lg:h-[360px]
+                  lg:w-[360px]
                 "
               />
 
-              {/* ===============================================
+              {/* =================================================
                   TOP RIGHT BADGE
-                  =============================================== */}
+                  ================================================= */}
+
               <div
                 className="
                   float-1
@@ -466,9 +633,10 @@ export default function Hero() {
                 Custom-Built ⚡
               </div>
 
-              {/* ===============================================
+              {/* =================================================
                   BOTTOM LEFT BADGE
-                  =============================================== */}
+                  ================================================= */}
+
               <div
                 className="
                   float-2
@@ -501,9 +669,14 @@ export default function Hero() {
                 Fast · Secure · Scalable
               </div>
 
-              {/* ===============================================
+              {/* =================================================
                   CHARACTER
-                  =============================================== */}
+
+                  Mobile/tablet sizes preserved.
+                  Desktop slightly controlled for better
+                  reference composition.
+                  ================================================= */}
+
               <Image
                 src="/character_glare.gif"
                 alt="Silverloft founding developer, illustrated full-body portrait holding a laptop"
@@ -515,16 +688,20 @@ export default function Hero() {
                 className="
                   h-auto
                   w-full
-                  max-w-[230px]
+                  max-w-[210px]
                   select-none
                   object-contain
                   drop-shadow-[0_25px_35px_rgba(10,10,10,0.25)]
 
-                  sm:max-w-[400px]
+                  sm:max-w-[360px]
 
-                  md:max-w-[480px]
+                  md:max-w-[430px]
 
-                  lg:max-w-[520px]
+                  lg:max-w-[430px]
+
+                  xl:max-w-[445px]
+
+                  2xl:max-w-[455px]
                 "
               />
             </div>
@@ -533,8 +710,9 @@ export default function Hero() {
       </div>
 
       {/* =========================================================
-          LOADER ORB — EXPLORE CONTROL
+          EXPLORE CONTROL
           ========================================================= */}
+
       <div
         className="
           hero-fade-in
@@ -556,11 +734,13 @@ export default function Hero() {
           md:mb-9
           md:pr-8
 
-          lg:mt-[-56px]
+          lg:mt-[-60px]
           lg:mb-10
           lg:pr-10
 
-          xl:mt-[-64px]
+          xl:mt-[-68px]
+
+          2xl:mt-[-72px]
         "
         style={{
           animationDelay: '260ms',
@@ -600,18 +780,17 @@ export default function Hero() {
           "
         >
           {/* =====================================================
-              LOADER ORB
+              LOADER
               ===================================================== */}
+
           <div
             className="
               explore-loader-shell
               pointer-events-none
               relative
               z-10
-
               transition-all
               duration-500
-
               group-hover:drop-shadow-[0_0_28px_rgba(255,191,72,0.45)]
             "
           >
@@ -622,8 +801,9 @@ export default function Hero() {
           </div>
 
           {/* =====================================================
-              CENTER EXPLORE LABEL
+              CENTER LABEL
               ===================================================== */}
+
           <div
             className="
               pointer-events-none
@@ -673,6 +853,7 @@ export default function Hero() {
           {/* =====================================================
               HOVER DESCRIPTION
               ===================================================== */}
+
           <span
             className="
               pointer-events-none
@@ -706,108 +887,125 @@ export default function Hero() {
       </div>
 
       {/* =========================================================
-          ANIMATIONS + RESPONSIVE POSITIONING
+          ANIMATIONS
           ========================================================= */}
+
       <style jsx>{`
 
         /* =======================================================
-           RESPONSIVE ORB SIZE
+           ORB
            ======================================================= */
-
-        /*
-         * One LoaderOrb instance only.
-         *
-         * The shell scales the complete orb instead of changing
-         * the LoaderOrb itself. This keeps its SVG mask,
-         * blur, rotation and color animation intact.
-         */
 
         .explore-loader-shell {
           transform: scale(0.48);
           transform-origin: center;
           animation:
-            exploreOrbFloatMobile 4s ease-in-out infinite;
+            exploreOrbFloatMobile
+            4s
+            ease-in-out
+            infinite;
         }
 
         @media (min-width: 640px) {
           .explore-loader-shell {
             transform: scale(0.98);
             animation:
-              exploreOrbFloatDesktop 4s ease-in-out infinite;
+              exploreOrbFloatDesktop
+              4s
+              ease-in-out
+              infinite;
           }
         }
 
         /* =======================================================
-           MOBILE ORB FLOAT
+           MOBILE ORB
            ======================================================= */
 
         @keyframes exploreOrbFloatMobile {
           0%,
           100% {
-            transform: scale(0.48) translateY(0);
+            transform:
+              scale(0.48)
+              translateY(0);
           }
 
           50% {
-            transform: scale(0.48) translateY(-3px);
+            transform:
+              scale(0.48)
+              translateY(-3px);
           }
         }
 
         /* =======================================================
-           DESKTOP ORB FLOAT
+           DESKTOP ORB
            ======================================================= */
 
         @keyframes exploreOrbFloatDesktop {
           0%,
           100% {
-            transform: scale(0.98) translateY(0);
+            transform:
+              scale(0.98)
+              translateY(0);
           }
 
           50% {
-            transform: scale(0.98) translateY(-4px);
+            transform:
+              scale(0.98)
+              translateY(-4px);
           }
         }
 
         /* =======================================================
-           CENTER TEXT GLOW
+           EXPLORE TEXT
            ======================================================= */
 
         .explore-center-title {
           text-shadow:
-            0 1px 4px rgba(0, 0, 0, 0.55),
-            0 0 10px rgba(0, 0, 0, 0.3);
+            0 1px 4px
+              rgba(0, 0, 0, 0.55),
+            0 0 10px
+              rgba(0, 0, 0, 0.3);
         }
 
         /* =======================================================
-           HERO FADE IN
+           HERO FADE
            ======================================================= */
 
         .hero-fade-in {
           opacity: 0;
           animation:
-            heroFadeIn 700ms ease-out forwards;
+            heroFadeIn
+            700ms
+            ease-out
+            forwards;
         }
 
         @keyframes heroFadeIn {
           from {
             opacity: 0;
-            transform: translateY(18px);
+            transform:
+              translateY(18px);
           }
 
           to {
             opacity: 1;
-            transform: translateY(0);
+            transform:
+              translateY(0);
           }
         }
 
         /* =======================================================
-           HEADLINE DEPTH
+           HEADLINE
            ======================================================= */
 
         .hero-headline {
           text-shadow:
-            0 1px 0 rgba(10, 10, 10, 0.05),
-            0 2px 0 rgba(10, 10, 10, 0.035),
-            0 6px 14px rgba(10, 10, 10, 0.1);
+            0 1px 0
+              rgba(10, 10, 10, 0.05),
+            0 2px 0
+              rgba(10, 10, 10, 0.035),
+            0 6px 14px
+              rgba(10, 10, 10, 0.1);
         }
 
         /* =======================================================
@@ -815,34 +1013,42 @@ export default function Hero() {
            ======================================================= */
 
         .static-shine {
-          background-image: linear-gradient(
-            120deg,
-            #0a0a0a 35%,
-            #f4f4f4 50%,
-            #0a0a0a 65%
-          );
+          background-image:
+            linear-gradient(
+              120deg,
+              #0a0a0a 35%,
+              #f4f4f4 50%,
+              #0a0a0a 65%
+            );
 
-          background-size: 220% 100%;
+          background-size:
+            220% 100%;
 
           -webkit-background-clip: text;
           background-clip: text;
 
-          -webkit-text-fill-color: transparent;
+          -webkit-text-fill-color:
+            transparent;
 
           color: transparent;
 
           animation:
-            staticShine 5.5s ease-in-out infinite;
+            staticShine
+            5.5s
+            ease-in-out
+            infinite;
         }
 
         @keyframes staticShine {
           0% {
-            background-position: 200% 0;
+            background-position:
+              200% 0;
           }
 
           55%,
           100% {
-            background-position: -60% 0;
+            background-position:
+              -60% 0;
           }
         }
 
@@ -854,18 +1060,23 @@ export default function Hero() {
           opacity: 0;
 
           animation:
-            footLetterIn 500ms ease-out forwards;
+            footLetterIn
+            500ms
+            ease-out
+            forwards;
         }
 
         @keyframes footLetterIn {
           from {
             opacity: 0;
-            transform: translateY(6px);
+            transform:
+              translateY(6px);
           }
 
           to {
             opacity: 1;
-            transform: translateY(0);
+            transform:
+              translateY(0);
           }
         }
 
@@ -875,24 +1086,33 @@ export default function Hero() {
 
         .float-1 {
           animation:
-            floatY 5s ease-in-out infinite;
+            floatY
+            5s
+            ease-in-out
+            infinite;
         }
 
         .float-2 {
           animation:
-            floatY 6s ease-in-out infinite;
+            floatY
+            6s
+            ease-in-out
+            infinite;
 
-          animation-delay: 0.8s;
+          animation-delay:
+            0.8s;
         }
 
         @keyframes floatY {
           0%,
           100% {
-            transform: translateY(0);
+            transform:
+              translateY(0);
           }
 
           50% {
-            transform: translateY(-10px);
+            transform:
+              translateY(-10px);
           }
         }
 
@@ -902,7 +1122,10 @@ export default function Hero() {
 
         .glow-pulse {
           animation:
-            glowPulse 4s ease-in-out infinite;
+            glowPulse
+            4s
+            ease-in-out
+            infinite;
         }
 
         @keyframes glowPulse {
@@ -911,7 +1134,10 @@ export default function Hero() {
             opacity: 0.6;
 
             transform:
-              translate(-50%, -50%)
+              translate(
+                -50%,
+                -50%
+              )
               scale(1);
           }
 
@@ -919,7 +1145,10 @@ export default function Hero() {
             opacity: 1;
 
             transform:
-              translate(-50%, -50%)
+              translate(
+                -50%,
+                -50%
+              )
               scale(1.08);
           }
         }
@@ -930,12 +1159,18 @@ export default function Hero() {
 
         .blob-drift-a {
           animation:
-            blobDriftA 14s ease-in-out infinite;
+            blobDriftA
+            14s
+            ease-in-out
+            infinite;
         }
 
         .blob-drift-b {
           animation:
-            blobDriftB 17s ease-in-out infinite;
+            blobDriftB
+            17s
+            ease-in-out
+            infinite;
         }
 
         @keyframes blobDriftA {
@@ -972,7 +1207,9 @@ export default function Hero() {
            REDUCED MOTION
            ======================================================= */
 
-        @media (prefers-reduced-motion: reduce) {
+        @media (
+          prefers-reduced-motion: reduce
+        ) {
           .hero-fade-in,
           .static-shine,
           .foot-letter,
@@ -1001,8 +1238,10 @@ export default function Hero() {
         @media (max-width: 380px) {
           .hero-headline {
             text-shadow:
-              0 1px 0 rgba(10, 10, 10, 0.04),
-              0 4px 10px rgba(10, 10, 10, 0.08);
+              0 1px 0
+                rgba(10, 10, 10, 0.04),
+              0 4px 10px
+                rgba(10, 10, 10, 0.08);
           }
 
           .explore-center-title {
@@ -1010,6 +1249,7 @@ export default function Hero() {
             letter-spacing: 0.1em;
           }
         }
+
       `}</style>
     </section>
   );

@@ -5,33 +5,10 @@ import { useEffect, useRef, useState } from 'react';
 /**
  * SILVERLOFT — PREMIUM 3D MOBILE SHOWCASE
  *
- * Features:
- * - Real smartphone-style mockups
- * - Larger phones (desktop) / calmer, tighter phones (mobile & tablet)
- * - 3D Y-axis + Z-axis rotation, amplitude tuned per breakpoint
- * - Center phone comes forward
- * - Continuous marquee
- * - Smooth horizontal arc
- * - POSITION-DRIVEN "spotlight" reveal (NEW): whichever phone is
- *   closest to center automatically gets full color + its label/
- *   preview button, driven by a CSS var (--spotlight) updated every
- *   animation frame. On desktop, a real mouse hover forces the same
- *   spotlight to 1 (instant + pauses the marquee) as before. On
- *   mobile/touch there is no hover at all, so without this the
- *   "reveal" moment — the whole point of the effect — never
- *   happened. Now every device gets the same moment, just delivered
- *   passively as the card drifts through center instead of on hover.
- * - Mouse-following glare + diagonal cinematic shine (desktop bonus,
- *   harmless no-op on touch)
- * - Dynamic Island
- * - Phone side buttons
- * - Live preview button
- * - Responsive desktop / tablet / mobile
- * - Reduced-motion support
- * - Hover handlers are now gated behind a real "(hover: hover) and
- *   (pointer: fine)" check, so a stray touch-triggered mouseenter on
- *   mobile can no longer permanently pause the marquee (a real bug
- *   the old hover-only version was exposed to on touch devices).
+ * Desktop composition has been refined to create a cleaner,
+ * reference-style five-phone hero arrangement.
+ *
+ * Mobile + tablet responsiveness is preserved.
  */
 
 const CARDS = [
@@ -110,10 +87,7 @@ const CARDS = [
 ];
 
 /* ================================================================
-   CONFIGURATION — DESKTOP DEFAULTS
-   Mobile/tablet variants are computed in measure() below; these
-   constants stay as the top (>=1024px) tier and as safe fallbacks
-   before the first measurement runs.
+   RESPONSIVE PHONE CONFIGURATION
    ================================================================ */
 
 const PHONE_W_DESKTOP = 292;
@@ -145,19 +119,46 @@ const PHONE_TOP_DESKTOP = 52;
 const PHONE_TOP_TABLET = 30;
 const PHONE_TOP_MOBILE = 12;
 
+/* ================================================================
+   DESKTOP COMPOSITION
+   Mobile/tablet values remain independent and unchanged.
+   ================================================================ */
+
+const DESKTOP_GAP = 18;
+const TABLET_GAP = 22;
+const MOBILE_GAP = 14;
+
+const DESKTOP_EDGE_OPACITY = 0.72;
+const TABLET_EDGE_OPACITY = 0.66;
+const MOBILE_EDGE_OPACITY = 0.62;
+
+const DESKTOP_SCALE_MIN = 0.86;
+const TABLET_SCALE_MIN = 0.88;
+const MOBILE_SCALE_MIN = 0.9;
+
+const DESKTOP_CENTER_Z = 42;
+const TABLET_CENTER_Z = 18;
+const MOBILE_CENTER_Z = 0;
+
 const SET_COUNT = 3;
 
-// How close to dead-center (0..1, 1 = perfectly centered) a card
-// must drift before it starts "waking up" out of the resting state.
-// Below this the card stays fully in its resting (grayscale, label
-// dim, button hidden) look — matches the old !isHovered state.
+/*
+ * Card starts revealing when it gets sufficiently close
+ * to the center of the hero.
+ */
 const SPOTLIGHT_WAKE_THRESHOLD = 0.55;
 
 /* ================================================================
    PHONE MOCKUP
    ================================================================ */
 
-function PhoneMockup({ label, image, link, isHovered, onMouseMove }) {
+function PhoneMockup({
+  label,
+  image,
+  link,
+  isHovered,
+  onMouseMove,
+}) {
   const handlePreviewClick = (event) => {
     event.stopPropagation();
 
@@ -167,31 +168,52 @@ function PhoneMockup({ label, image, link, isHovered, onMouseMove }) {
   };
 
   return (
-    <div className="relative h-full w-full" onMouseMove={onMouseMove}>
-      {/* ============================================================
-          FLOOR SHADOW
-          Driven by --spotlight (0..1) instead of a hover boolean, so
-          it breathes as the card drifts through center on every
-          device, not just under a mouse.
-         ============================================================ */}
+    <div
+      className="relative h-full w-full"
+      onMouseMove={onMouseMove}
+    >
+      {/* Floor shadow */}
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[82%] h-24 w-[78%] -translate-x-1/2 rounded-full bg-black/20 blur-2xl"
+        className="
+          pointer-events-none
+          absolute
+          left-1/2
+          top-[82%]
+          h-24
+          w-[78%]
+          -translate-x-1/2
+          rounded-full
+          bg-black/20
+          blur-2xl
+        "
         style={{
           opacity: 'calc(0.5 + var(--spotlight, 0) * 0.5)',
           transform:
             'translateX(-50%) scale(calc(0.92 + var(--spotlight, 0) * 0.16))',
-          transition: 'opacity 500ms ease-out, transform 500ms ease-out',
+          transition:
+            'opacity 500ms ease-out, transform 500ms ease-out',
         }}
       />
 
-      {/* ============================================================
-          PHONE BODY
-         ============================================================ */}
+      {/* Phone body */}
 
       <div
-        className="group/phone relative h-full w-full rounded-[44px] border border-white/70 bg-[#171717] p-[7px] transition-[box-shadow] duration-700 ease-out"
+        className="
+          group/phone
+          relative
+          h-full
+          w-full
+          rounded-[44px]
+          border
+          border-white/70
+          bg-[#171717]
+          p-[7px]
+          transition-[box-shadow]
+          duration-700
+          ease-out
+        "
         style={{
           boxShadow: isHovered
             ? `
@@ -204,37 +226,63 @@ function PhoneMockup({ label, image, link, isHovered, onMouseMove }) {
             `,
         }}
       >
-        {/* ============================================================
-            SIDE BUTTONS
-           ============================================================ */}
+        {/* Side buttons */}
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-[3px] top-[25%] h-16 w-[3px] rounded-r-full bg-white/35"
+          className="
+            pointer-events-none
+            absolute
+            -right-[3px]
+            top-[25%]
+            h-16
+            w-[3px]
+            rounded-r-full
+            bg-white/35
+          "
         />
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -left-[3px] top-[22%] h-10 w-[3px] rounded-l-full bg-white/35"
+          className="
+            pointer-events-none
+            absolute
+            -left-[3px]
+            top-[22%]
+            h-10
+            w-[3px]
+            rounded-l-full
+            bg-white/35
+          "
         />
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -left-[3px] top-[31%] h-16 w-[3px] rounded-l-full bg-white/30"
+          className="
+            pointer-events-none
+            absolute
+            -left-[3px]
+            top-[31%]
+            h-16
+            w-[3px]
+            rounded-l-full
+            bg-white/30
+          "
         />
 
-        {/* ============================================================
-            SCREEN
-           ============================================================ */}
+        {/* Screen */}
 
-        <div className="relative h-full w-full overflow-hidden rounded-[38px] bg-black">
-          {/* ========================================================
-              PROJECT IMAGE
-              Grayscale → color driven by --spotlight, so the "reveal"
-              moment now happens automatically as each card passes
-              through center — on touch devices too, where a real
-              hover state can never fire.
-             ======================================================== */}
+        <div
+          className="
+            relative
+            h-full
+            w-full
+            overflow-hidden
+            rounded-[38px]
+            bg-black
+          "
+        >
+          {/* Project image */}
 
           <img
             src={image}
@@ -242,27 +290,47 @@ function PhoneMockup({ label, image, link, isHovered, onMouseMove }) {
             draggable="false"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 h-full w-full select-none object-cover object-top will-change-transform"
+            className="
+              absolute
+              inset-0
+              h-full
+              w-full
+              select-none
+              object-cover
+              object-top
+              will-change-transform
+            "
             style={{
               filter: `
-                grayscale(calc(100% - var(--spotlight, 0) * 100%))
-                contrast(calc(0.90 + var(--spotlight, 0) * 0.10))
-                brightness(calc(0.68 + var(--spotlight, 0) * 0.32))
-                saturate(calc(0.72 + var(--spotlight, 0) * 0.28))
+                grayscale(
+                  calc(100% - var(--spotlight, 0) * 100%)
+                )
+                contrast(
+                  calc(0.90 + var(--spotlight, 0) * 0.10)
+                )
+                brightness(
+                  calc(0.68 + var(--spotlight, 0) * 0.32)
+                )
+                saturate(
+                  calc(0.72 + var(--spotlight, 0) * 0.28)
+                )
               `,
-              transform: 'scale(calc(1 + var(--spotlight, 0) * 0.035))',
+              transform:
+                'scale(calc(1 + var(--spotlight, 0) * 0.035))',
               transition:
                 'filter 500ms ease-out, transform 500ms ease-out',
             }}
           />
 
-          {/* ========================================================
-              SCREEN GLASS
-             ======================================================== */}
+          {/* Screen glass */}
 
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+            "
             style={{
               background: `
                 linear-gradient(
@@ -272,43 +340,83 @@ function PhoneMockup({ label, image, link, isHovered, onMouseMove }) {
                   rgba(0,0,0,0.18)
                 )
               `,
-              opacity: 'calc(1 - var(--spotlight, 0))',
-              transition: 'opacity 500ms ease-out',
+              opacity:
+                'calc(1 - var(--spotlight, 0))',
+              transition:
+                'opacity 500ms ease-out',
             }}
           />
 
-          {/* ========================================================
-              DYNAMIC ISLAND
-             ======================================================== */}
+          {/* Dynamic island */}
 
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 top-[11px] z-20 h-[27px] w-[92px] -translate-x-1/2 rounded-full bg-black shadow-[0_2px_7px_rgba(0,0,0,0.30)]"
+            className="
+              pointer-events-none
+              absolute
+              left-1/2
+              top-[11px]
+              z-20
+              h-[27px]
+              w-[92px]
+              -translate-x-1/2
+              rounded-full
+              bg-black
+              shadow-[0_2px_7px_rgba(0,0,0,0.30)]
+            "
           >
-            <div className="absolute right-[17px] top-1/2 h-[6px] w-[6px] -translate-y-1/2 rounded-full bg-white/10" />
+            <div
+              className="
+                absolute
+                right-[17px]
+                top-1/2
+                h-[6px]
+                w-[6px]
+                -translate-y-1/2
+                rounded-full
+                bg-white/10
+              "
+            />
           </div>
 
-          {/* ========================================================
-              TOP SCREEN REFLECTION
-             ======================================================== */}
+          {/* Top screen reflection */}
 
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[32%] bg-gradient-to-b from-white/[0.12] via-white/[0.025] to-transparent"
+            className="
+              pointer-events-none
+              absolute
+              inset-x-0
+              top-0
+              z-10
+              h-[32%]
+              bg-gradient-to-b
+              from-white/[0.12]
+              via-white/[0.025]
+              to-transparent
+            "
             style={{
-              opacity: 'calc(0.72 - var(--spotlight, 0) * 0.50)',
-              transition: 'opacity 500ms ease-out',
+              opacity:
+                'calc(0.72 - var(--spotlight, 0) * 0.50)',
+              transition:
+                'opacity 500ms ease-out',
             }}
           />
 
-          {/* ========================================================
-              MOUSE FOLLOWING GLARE (desktop hover bonus — no-op
-              on touch since group-hover never triggers there)
-             ======================================================== */}
+          {/* Mouse glare */}
 
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-[45%] z-30 opacity-0 transition-opacity duration-500 group-hover/phone:opacity-100"
+            className="
+              pointer-events-none
+              absolute
+              -inset-[45%]
+              z-30
+              opacity-0
+              transition-opacity
+              duration-500
+              group-hover/phone:opacity-100
+            "
             style={{
               background: `
                 radial-gradient(
@@ -322,22 +430,41 @@ function PhoneMockup({ label, image, link, isHovered, onMouseMove }) {
             }}
           />
 
-          {/* ========================================================
-              DIAGONAL LIGHT SWEEP (desktop hover bonus)
-             ======================================================== */}
+          {/* Diagonal light sweep */}
 
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -left-1/2 top-0 z-30 h-full w-[48%] -skew-x-[18deg] bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 transition-all duration-700 group-hover/phone:left-[105%] group-hover/phone:opacity-100"
+            className="
+              pointer-events-none
+              absolute
+              -left-1/2
+              top-0
+              z-30
+              h-full
+              w-[48%]
+              -skew-x-[18deg]
+              bg-gradient-to-r
+              from-transparent
+              via-white/20
+              to-transparent
+              opacity-0
+              transition-all
+              duration-700
+              group-hover/phone:left-[105%]
+              group-hover/phone:opacity-100
+            "
           />
 
-          {/* ========================================================
-              BOTTOM CINEMATIC SHADOW
-             ======================================================== */}
+          {/* Bottom cinematic shadow */}
 
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-10"
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+              z-10
+            "
             style={{
               background: `
                 linear-gradient(
@@ -346,35 +473,63 @@ function PhoneMockup({ label, image, link, isHovered, onMouseMove }) {
                   rgba(0,0,0,0.46) 100%
                 )
               `,
-              opacity: 'calc(0.72 - var(--spotlight, 0) * 0.50)',
-              transition: 'opacity 500ms ease-out',
+              opacity:
+                'calc(0.72 - var(--spotlight, 0) * 0.50)',
+              transition:
+                'opacity 500ms ease-out',
             }}
           />
 
-          {/* ========================================================
-              PROJECT LABEL
-             ======================================================== */}
+          {/* Project label */}
 
           <div
-            className="pointer-events-none absolute bottom-3 left-3 z-40 max-w-[72%] rounded-full border border-white/25 bg-black/45 px-2.5 py-1.5 text-[6.5px] font-semibold uppercase tracking-[0.16em] text-white shadow-lg backdrop-blur-xl sm:bottom-5 sm:left-5 sm:px-3.5 sm:py-2 sm:text-[8px] sm:tracking-[0.19em]"
+            className="
+              pointer-events-none
+              absolute
+              bottom-3
+              left-3
+              z-40
+              max-w-[72%]
+              rounded-full
+              border
+              border-white/25
+              bg-black/45
+              px-2.5
+              py-1.5
+              text-[6.5px]
+              font-semibold
+              uppercase
+              tracking-[0.16em]
+              text-white
+              shadow-lg
+              backdrop-blur-xl
+
+              sm:bottom-5
+              sm:left-5
+              sm:px-3.5
+              sm:py-2
+              sm:text-[8px]
+              sm:tracking-[0.19em]
+            "
             style={{
-              opacity: 'calc(0.82 + var(--spotlight, 0) * 0.18)',
+              opacity:
+                'calc(0.82 + var(--spotlight, 0) * 0.18)',
               transform: `
-                translateY(calc(2px - var(--spotlight, 0) * 2px))
-                scale(calc(0.98 + var(--spotlight, 0) * 0.02))
+                translateY(
+                  calc(2px - var(--spotlight, 0) * 2px)
+                )
+                scale(
+                  calc(0.98 + var(--spotlight, 0) * 0.02)
+                )
               `,
-              transition: 'opacity 500ms ease-out, transform 500ms ease-out',
+              transition:
+                'opacity 500ms ease-out, transform 500ms ease-out',
             }}
           >
             {label}
           </div>
 
-          {/* ========================================================
-              LIVE PREVIEW BUTTON
-              Pops in once a card is well past the wake threshold —
-              works identically whether that happened via mouse hover
-              (desktop) or drifting through center (any device).
-             ======================================================== */}
+          {/* Live preview */}
 
           {link && (
             <button
@@ -382,15 +537,48 @@ function PhoneMockup({ label, image, link, isHovered, onMouseMove }) {
               onClick={handlePreviewClick}
               aria-label={`Open ${label} live preview`}
               title="View live"
-              className="pointer-events-auto absolute bottom-3 right-3 z-50 flex h-8 w-8 items-center justify-center rounded-full border border-white/50 bg-white/95 text-black shadow-[0_12px_28px_-8px_rgba(0,0,0,0.60)] backdrop-blur-xl transition-transform duration-300 ease-out hover:scale-110 active:scale-95 sm:bottom-5 sm:right-5 sm:h-11 sm:w-11"
+              className="
+                pointer-events-auto
+                absolute
+                bottom-3
+                right-3
+                z-50
+                flex
+                h-8
+                w-8
+                items-center
+                justify-center
+                rounded-full
+                border
+                border-white/50
+                bg-white/95
+                text-black
+                shadow-[0_12px_28px_-8px_rgba(0,0,0,0.60)]
+                backdrop-blur-xl
+                transition-transform
+                duration-300
+                ease-out
+                hover:scale-110
+                active:scale-95
+
+                sm:bottom-5
+                sm:right-5
+                sm:h-11
+                sm:w-11
+              "
               style={{
                 opacity:
                   'clamp(0, calc((var(--spotlight, 0) - 0.55) * 2.2), 1)',
                 transform: `
-                  translateY(calc(10px - var(--spotlight, 0) * 10px))
-                  scale(calc(0.72 + var(--spotlight, 0) * 0.28))
+                  translateY(
+                    calc(10px - var(--spotlight, 0) * 10px)
+                  )
+                  scale(
+                    calc(0.72 + var(--spotlight, 0) * 0.28)
+                  )
                 `,
-                transition: 'opacity 400ms ease-out, transform 400ms ease-out',
+                transition:
+                  'opacity 400ms ease-out, transform 400ms ease-out',
               }}
             >
               <svg
@@ -412,13 +600,18 @@ function PhoneMockup({ label, image, link, isHovered, onMouseMove }) {
           )}
         </div>
 
-        {/* ============================================================
-            OUTER PHONE HIGHLIGHT
-           ============================================================ */}
+        {/* Outer phone highlight */}
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-[44px] border border-white/15"
+          className="
+            pointer-events-none
+            absolute
+            inset-0
+            rounded-[44px]
+            border
+            border-white/15
+          "
         />
       </div>
     </div>
@@ -432,23 +625,43 @@ function PhoneMockup({ label, image, link, isHovered, onMouseMove }) {
 export default function CardCarouselBackground() {
   const containerRef = useRef(null);
   const cardRefs = useRef([]);
+
   const offsetRef = useRef(0);
   const pausedIndexRef = useRef(null);
   const rafRef = useRef(null);
   const hoverCapableRef = useRef(false);
 
   const containerWidthRef = useRef(1200);
+
   const cardWidthRef = useRef(PHONE_W_DESKTOP);
   const cardHeightRef = useRef(PHONE_H_DESKTOP);
-  const gapRef = useRef(34);
+
+  const gapRef = useRef(DESKTOP_GAP);
   const phoneTopRef = useRef(PHONE_TOP_DESKTOP);
+
   const arcDropRef = useRef(ARC_DROP_DESKTOP);
   const maxRotateYRef = useRef(MAX_ROTATE_Y_DESKTOP);
   const maxRotateZRef = useRef(MAX_ROTATE_Z_DESKTOP);
+
   const speedRef = useRef(SPEED_DESKTOP);
 
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const edgeOpacityRef = useRef(
+    DESKTOP_EDGE_OPACITY
+  );
+
+  const scaleMinRef = useRef(
+    DESKTOP_SCALE_MIN
+  );
+
+  const centerZRef = useRef(
+    DESKTOP_CENTER_Z
+  );
+
+  const [reducedMotion, setReducedMotion] =
+    useState(false);
+
+  const [hoveredIndex, setHoveredIndex] =
+    useState(null);
 
   const slots = SET_COUNT * CARDS.length;
 
@@ -456,57 +669,115 @@ export default function CardCarouselBackground() {
      MARQUEE WIDTH
      ================================================================ */
 
-  const itemWidth = () => cardWidthRef.current + gapRef.current;
-  const setWidth = () => itemWidth() * CARDS.length;
+  const itemWidth = () =>
+    cardWidthRef.current + gapRef.current;
+
+  const setWidth = () =>
+    itemWidth() * CARDS.length;
 
   /* ================================================================
      RESPONSIVE MEASUREMENT
      ================================================================ */
 
   useEffect(() => {
-    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mql = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    );
+
     setReducedMotion(mql.matches);
 
-    const onMotionChange = (event) => setReducedMotion(event.matches);
-    mql.addEventListener('change', onMotionChange);
+    const onMotionChange = (event) => {
+      setReducedMotion(event.matches);
+    };
 
-    // Real mouse-hover capability check — a touch tap can fire a
-    // synthetic mouseenter with no matching mouseleave on some mobile
-    // browsers, which used to permanently pause the marquee. Gating
-    // the hover handlers behind this fixes that.
-    hoverCapableRef.current = window.matchMedia(
-      '(hover: hover) and (pointer: fine)'
-    ).matches;
+    mql.addEventListener(
+      'change',
+      onMotionChange
+    );
+
+    hoverCapableRef.current =
+      window.matchMedia(
+        '(hover: hover) and (pointer: fine)'
+      ).matches;
 
     const measure = () => {
       const width = window.innerWidth;
 
       if (containerRef.current) {
-        containerWidthRef.current = containerRef.current.offsetWidth;
+        containerWidthRef.current =
+          containerRef.current.offsetWidth;
       }
 
-      let targetWidth = PHONE_W_DESKTOP;
-      let targetHeight = PHONE_H_DESKTOP;
-      let gap = 34;
-      let top = PHONE_TOP_DESKTOP;
-      let arcDrop = ARC_DROP_DESKTOP;
-      let maxRotateY = MAX_ROTATE_Y_DESKTOP;
-      let maxRotateZ = MAX_ROTATE_Z_DESKTOP;
-      let speed = SPEED_DESKTOP;
+      let targetWidth =
+        PHONE_W_DESKTOP;
+
+      let targetHeight =
+        PHONE_H_DESKTOP;
+
+      let gap =
+        DESKTOP_GAP;
+
+      let top =
+        PHONE_TOP_DESKTOP;
+
+      let arcDrop =
+        ARC_DROP_DESKTOP;
+
+      let maxRotateY =
+        MAX_ROTATE_Y_DESKTOP;
+
+      let maxRotateZ =
+        MAX_ROTATE_Z_DESKTOP;
+
+      let speed =
+        SPEED_DESKTOP;
+
+      let edgeOpacity =
+        DESKTOP_EDGE_OPACITY;
+
+      let scaleMin =
+        DESKTOP_SCALE_MIN;
+
+      let centerZ =
+        DESKTOP_CENTER_Z;
 
       /* ============================================================
          MOBILE
          ============================================================ */
 
       if (width < 640) {
-        targetWidth = PHONE_W_MOBILE;
-        targetHeight = PHONE_H_MOBILE;
-        gap = 14;
-        top = PHONE_TOP_MOBILE;
-        arcDrop = ARC_DROP_MOBILE;
-        maxRotateY = MAX_ROTATE_Y_MOBILE;
-        maxRotateZ = MAX_ROTATE_Z_MOBILE;
-        speed = SPEED_MOBILE;
+        targetWidth =
+          PHONE_W_MOBILE;
+
+        targetHeight =
+          PHONE_H_MOBILE;
+
+        gap =
+          MOBILE_GAP;
+
+        top =
+          PHONE_TOP_MOBILE;
+
+        arcDrop =
+          ARC_DROP_MOBILE;
+
+        maxRotateY =
+          MAX_ROTATE_Y_MOBILE;
+
+        maxRotateZ =
+          MAX_ROTATE_Z_MOBILE;
+
+        speed =
+          SPEED_MOBILE;
+
+        edgeOpacity =
+          MOBILE_EDGE_OPACITY;
+
+        scaleMin =
+          MOBILE_SCALE_MIN;
+
+        centerZ =
+          MOBILE_CENTER_Z;
       }
 
       /* ============================================================
@@ -514,37 +785,98 @@ export default function CardCarouselBackground() {
          ============================================================ */
 
       else if (width < 1024) {
-        targetWidth = PHONE_W_TABLET;
-        targetHeight = PHONE_H_TABLET;
-        gap = 22;
-        top = PHONE_TOP_TABLET;
-        arcDrop = ARC_DROP_TABLET;
-        maxRotateY = MAX_ROTATE_Y_TABLET;
-        maxRotateZ = MAX_ROTATE_Z_TABLET;
-        speed = SPEED_TABLET;
+        targetWidth =
+          PHONE_W_TABLET;
+
+        targetHeight =
+          PHONE_H_TABLET;
+
+        gap =
+          TABLET_GAP;
+
+        top =
+          PHONE_TOP_TABLET;
+
+        arcDrop =
+          ARC_DROP_TABLET;
+
+        maxRotateY =
+          MAX_ROTATE_Y_TABLET;
+
+        maxRotateZ =
+          MAX_ROTATE_Z_TABLET;
+
+        speed =
+          SPEED_TABLET;
+
+        edgeOpacity =
+          TABLET_EDGE_OPACITY;
+
+        scaleMin =
+          TABLET_SCALE_MIN;
+
+        centerZ =
+          TABLET_CENTER_Z;
       }
 
       /* ============================================================
          SAVE DIMENSIONS
          ============================================================ */
 
-      cardWidthRef.current = targetWidth;
-      cardHeightRef.current = targetHeight;
-      gapRef.current = gap;
-      phoneTopRef.current = top;
-      arcDropRef.current = arcDrop;
-      maxRotateYRef.current = maxRotateY;
-      maxRotateZRef.current = maxRotateZ;
-      speedRef.current = speed;
+      cardWidthRef.current =
+        targetWidth;
+
+      cardHeightRef.current =
+        targetHeight;
+
+      gapRef.current =
+        gap;
+
+      phoneTopRef.current =
+        top;
+
+      arcDropRef.current =
+        arcDrop;
+
+      maxRotateYRef.current =
+        maxRotateY;
+
+      maxRotateZRef.current =
+        maxRotateZ;
+
+      speedRef.current =
+        speed;
+
+      edgeOpacityRef.current =
+        edgeOpacity;
+
+      scaleMinRef.current =
+        scaleMin;
+
+      centerZRef.current =
+        centerZ;
     };
 
     measure();
 
-    window.addEventListener('resize', measure, { passive: true });
+    window.addEventListener(
+      'resize',
+      measure,
+      {
+        passive: true,
+      }
+    );
 
     return () => {
-      mql.removeEventListener('change', onMotionChange);
-      window.removeEventListener('resize', measure);
+      mql.removeEventListener(
+        'change',
+        onMotionChange
+      );
+
+      window.removeEventListener(
+        'resize',
+        measure
+      );
     };
   }, []);
 
@@ -553,22 +885,36 @@ export default function CardCarouselBackground() {
      ================================================================ */
 
   useEffect(() => {
-    let last = performance.now();
+    let last =
+      performance.now();
 
     const tick = (now) => {
-      const dt = Math.min((now - last) / 1000, 0.05);
+      const dt = Math.min(
+        (now - last) / 1000,
+        0.05
+      );
+
       last = now;
 
       /* ============================================================
          MARQUEE MOVEMENT
          ============================================================ */
 
-      if (!reducedMotion && pausedIndexRef.current === null) {
-        offsetRef.current += speedRef.current * dt;
+      if (
+        !reducedMotion &&
+        pausedIndexRef.current === null
+      ) {
+        offsetRef.current +=
+          speedRef.current * dt;
 
-        const full = setWidth();
-        if (offsetRef.current >= full) {
-          offsetRef.current -= full;
+        const full =
+          setWidth();
+
+        if (
+          offsetRef.current >= full
+        ) {
+          offsetRef.current -=
+            full;
         }
       }
 
@@ -576,128 +922,196 @@ export default function CardCarouselBackground() {
          CONTAINER
          ============================================================ */
 
-      const containerWidth = containerWidthRef.current;
-      const halfContainerWidth = containerWidth / 2;
-      const cardWidth = cardWidthRef.current;
+      const containerWidth =
+        containerWidthRef.current;
+
+      const halfContainerWidth =
+        containerWidth / 2;
+
+      const cardWidth =
+        cardWidthRef.current;
 
       /* ============================================================
          EACH PHONE
          ============================================================ */
 
-      cardRefs.current.forEach((element, index) => {
-        if (!element) return;
+      cardRefs.current.forEach(
+        (element, index) => {
+          if (!element) return;
 
-        /* --------------------------------------------------------
-           HORIZONTAL POSITION
-           -------------------------------------------------------- */
+          /* --------------------------------------------------------
+             HORIZONTAL POSITION
+             -------------------------------------------------------- */
 
-        const x = index * itemWidth() - offsetRef.current;
+          const x =
+            index * itemWidth() -
+            offsetRef.current;
 
-        /* --------------------------------------------------------
-           CENTER POINT
-           -------------------------------------------------------- */
+          /* --------------------------------------------------------
+             CENTER POINT
+             -------------------------------------------------------- */
 
-        const cardCenter = x + cardWidth / 2;
+          const cardCenter =
+            x + cardWidth / 2;
 
-        /* --------------------------------------------------------
-           NORMALIZED DISTANCE
-           -1 = far left, 0 = center, +1 = far right
-           -------------------------------------------------------- */
+          /* --------------------------------------------------------
+             NORMALIZED DISTANCE
+             -------------------------------------------------------- */
 
-        let t = (cardCenter - halfContainerWidth) / Math.max(halfContainerWidth, 1);
-        t = Math.max(-1, Math.min(1, t));
+          let t =
+            (cardCenter -
+              halfContainerWidth) /
+            Math.max(
+              halfContainerWidth,
+              1
+            );
 
-        /* --------------------------------------------------------
-           CENTER STRENGTH
-           -------------------------------------------------------- */
+          t = Math.max(
+            -1,
+            Math.min(1, t)
+          );
 
-        const distance = Math.abs(t);
-        const centerStrength = 1 - distance;
+          /* --------------------------------------------------------
+             CENTER STRENGTH
+             -------------------------------------------------------- */
 
-        /* --------------------------------------------------------
-           ARC
-           -------------------------------------------------------- */
+          const distance =
+            Math.abs(t);
 
-        const arcY = arcDropRef.current * t * t;
-        const y = phoneTopRef.current + arcY;
+          const centerStrength =
+            1 - distance;
 
-        /* --------------------------------------------------------
-           3D Y ROTATION
-           -------------------------------------------------------- */
+          /* --------------------------------------------------------
+             ARC
+             -------------------------------------------------------- */
 
-        const rotateY = t * maxRotateYRef.current;
+          const arcY =
+            arcDropRef.current *
+            t *
+            t;
 
-        /* --------------------------------------------------------
-           Z ROTATION
-           -------------------------------------------------------- */
+          const y =
+            phoneTopRef.current +
+            arcY;
 
-        const rotateZ = t * maxRotateZRef.current;
+          /* --------------------------------------------------------
+             3D Y ROTATION
+             -------------------------------------------------------- */
 
-        /* --------------------------------------------------------
-           CENTER SCALE
-           -------------------------------------------------------- */
+          const rotateY =
+            t *
+            maxRotateYRef.current;
 
-        const scale = 0.9 + centerStrength * 0.1;
+          /* --------------------------------------------------------
+             Z ROTATION
+             -------------------------------------------------------- */
 
-        /* --------------------------------------------------------
-           Z-INDEX
-           -------------------------------------------------------- */
+          const rotateZ =
+            t *
+            maxRotateZRef.current;
 
-        const zIndex = Math.round(20 + centerStrength * 80);
+          /* --------------------------------------------------------
+             CENTER SCALE
+             -------------------------------------------------------- */
 
-        /* --------------------------------------------------------
-           SPOTLIGHT (NEW)
-           A real hover always wins (forced to 1). Otherwise the
-           card's own position in the arc drives it — remapped so
-           nothing "wakes up" until it's well past the wake
-           threshold, matching the old resting/hover split instead
-           of glowing faintly the whole time.
-           -------------------------------------------------------- */
+          const scale =
+            scaleMinRef.current +
+            centerStrength *
+              (1 - scaleMinRef.current);
 
-        let spotlight;
-        if (pausedIndexRef.current === index) {
-          spotlight = 1;
-        } else {
-          const raw =
-            (centerStrength - SPOTLIGHT_WAKE_THRESHOLD) /
-            (1 - SPOTLIGHT_WAKE_THRESHOLD);
-          spotlight = Math.max(0, Math.min(1, raw));
+          /* --------------------------------------------------------
+             Z-INDEX
+             -------------------------------------------------------- */
+
+          const zIndex =
+            Math.round(
+              20 +
+                centerStrength *
+                  80
+            );
+
+          /* --------------------------------------------------------
+             SPOTLIGHT
+             -------------------------------------------------------- */
+
+          let spotlight;
+
+          if (
+            pausedIndexRef.current ===
+            index
+          ) {
+            spotlight = 1;
+          } else {
+            const raw =
+              (centerStrength -
+                SPOTLIGHT_WAKE_THRESHOLD) /
+              (1 -
+                SPOTLIGHT_WAKE_THRESHOLD);
+
+            spotlight =
+              Math.max(
+                0,
+                Math.min(1, raw)
+              );
+          }
+
+          /* --------------------------------------------------------
+             APPLY TRANSFORM
+             -------------------------------------------------------- */
+
+          const centerDepth =
+            centerStrength *
+            centerZRef.current;
+
+          element.style.transform = `
+            translate3d(
+              ${x}px,
+              ${y}px,
+              ${centerDepth}px
+            )
+            rotateY(${rotateY}deg)
+            rotateZ(${rotateZ}deg)
+            scale(${scale})
+          `;
+
+          element.style.zIndex =
+            String(zIndex);
+
+          /* --------------------------------------------------------
+             EDGE FADE
+             -------------------------------------------------------- */
+
+          element.style.opacity =
+            String(
+              edgeOpacityRef.current +
+                centerStrength *
+                  (1 -
+                    edgeOpacityRef.current)
+            );
+
+          /* --------------------------------------------------------
+             SPOTLIGHT CSS VARIABLE
+             -------------------------------------------------------- */
+
+          element.style.setProperty(
+            '--spotlight',
+            spotlight.toFixed(3)
+          );
         }
+      );
 
-        /* --------------------------------------------------------
-           APPLY TRANSFORM
-           -------------------------------------------------------- */
-
-        element.style.transform = `
-          translate3d(${x}px, ${y}px, 0)
-          rotateY(${rotateY}deg)
-          rotateZ(${rotateZ}deg)
-          scale(${scale})
-        `;
-
-        element.style.zIndex = String(zIndex);
-
-        /* --------------------------------------------------------
-           EDGE FADE
-           -------------------------------------------------------- */
-
-        element.style.opacity = String(0.62 + centerStrength * 0.38);
-
-        /* --------------------------------------------------------
-           SPOTLIGHT CSS VAR — read by PhoneMockup's inline styles
-           -------------------------------------------------------- */
-
-        element.style.setProperty('--spotlight', spotlight.toFixed(3));
-      });
-
-      rafRef.current = requestAnimationFrame(tick);
+      rafRef.current =
+        requestAnimationFrame(tick);
     };
 
-    rafRef.current = requestAnimationFrame(tick);
+    rafRef.current =
+      requestAnimationFrame(tick);
 
     return () => {
       if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
+        cancelAnimationFrame(
+          rafRef.current
+        );
       }
     };
   }, [reducedMotion]);
@@ -709,73 +1123,188 @@ export default function CardCarouselBackground() {
   return (
     <div
       ref={containerRef}
-      className="relative h-full w-full overflow-hidden [perspective:1400px] pointer-events-none select-none"
+      className="
+        relative
+        h-full
+        w-full
+        overflow-hidden
+        [perspective:1400px]
+        pointer-events-none
+        select-none
+      "
       aria-hidden="true"
     >
-      {/* ============================================================
-          AMBIENT CENTER LIGHT
-         ============================================================ */}
+      {/* Ambient center light */}
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[42%] z-0 h-[220px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.07] blur-[70px] sm:h-[300px] sm:w-[480px] sm:blur-[90px] lg:h-[340px] lg:w-[620px] lg:blur-[100px]"
+        className="
+          pointer-events-none
+          absolute
+          left-1/2
+          top-[42%]
+          z-0
+          h-[220px]
+          w-[320px]
+          -translate-x-1/2
+          -translate-y-1/2
+          rounded-full
+          bg-white/[0.07]
+          blur-[70px]
+
+          sm:h-[300px]
+          sm:w-[480px]
+          sm:blur-[90px]
+
+          lg:h-[340px]
+          lg:w-[620px]
+          lg:blur-[100px]
+        "
       />
 
-      {/* ============================================================
-          PHONE SET
-         ============================================================ */}
+      {/* Phone set */}
 
-      {Array.from({ length: slots }).map((_, index) => {
-        const project = CARDS[index % CARDS.length];
-        const isHovered = hoveredIndex === index;
+      {Array.from({
+        length: slots,
+      }).map((_, index) => {
+        const project =
+          CARDS[
+            index % CARDS.length
+          ];
+
+        const isHovered =
+          hoveredIndex === index;
 
         return (
           <div
             key={`${project.id}-${index}`}
             ref={(element) => {
-              cardRefs.current[index] = element;
+              cardRefs.current[index] =
+                element;
             }}
-            className="absolute left-0 top-0 z-20 pointer-events-auto will-change-transform transform-gpu h-[320px] w-[150px] sm:h-[470px] sm:w-[220px] lg:h-[620px] lg:w-[292px]"
+            className="
+              absolute
+              left-0
+              top-0
+              z-20
+              pointer-events-auto
+              will-change-transform
+              transform-gpu
+              h-[320px]
+              w-[150px]
+
+              sm:h-[470px]
+              sm:w-[220px]
+
+              lg:h-[620px]
+              lg:w-[292px]
+            "
             style={{
-              transformStyle: 'preserve-3d',
-              transformOrigin: 'center center',
+              transformStyle:
+                'preserve-3d',
+
+              transformOrigin:
+                'center center',
             }}
-            /* ======================================================
-               HOVER — gated behind a real "can hover" check so a
-               touch tap can never freeze the marquee.
-               ====================================================== */
             onMouseEnter={() => {
-              if (!hoverCapableRef.current) return;
-              pausedIndexRef.current = index;
-              setHoveredIndex(index);
+              if (
+                !hoverCapableRef.current
+              ) {
+                return;
+              }
+
+              pausedIndexRef.current =
+                index;
+
+              setHoveredIndex(
+                index
+              );
             }}
             onMouseLeave={() => {
-              if (!hoverCapableRef.current) return;
-              pausedIndexRef.current = null;
-              setHoveredIndex(null);
+              if (
+                !hoverCapableRef.current
+              ) {
+                return;
+              }
+
+              pausedIndexRef.current =
+                null;
+
+              setHoveredIndex(
+                null
+              );
             }}
-            /* ======================================================
-               MOUSE GLARE
-               ====================================================== */
             onMouseMove={(event) => {
-              if (!hoverCapableRef.current) return;
-              const rect = event.currentTarget.getBoundingClientRect();
-              const x = ((event.clientX - rect.left) / rect.width) * 100;
-              const y = ((event.clientY - rect.top) / rect.height) * 100;
-              event.currentTarget.style.setProperty('--mx', `${x}%`);
-              event.currentTarget.style.setProperty('--my', `${y}%`);
+              if (
+                !hoverCapableRef.current
+              ) {
+                return;
+              }
+
+              const rect =
+                event.currentTarget.getBoundingClientRect();
+
+              const x =
+                ((event.clientX -
+                  rect.left) /
+                  rect.width) *
+                100;
+
+              const y =
+                ((event.clientY -
+                  rect.top) /
+                  rect.height) *
+                100;
+
+              event.currentTarget.style.setProperty(
+                '--mx',
+                `${x}%`
+              );
+
+              event.currentTarget.style.setProperty(
+                '--my',
+                `${y}%`
+              );
             }}
           >
             <PhoneMockup
               {...project}
-              isHovered={isHovered}
-              onMouseMove={(event) => {
-                if (!hoverCapableRef.current) return;
-                const rect = event.currentTarget.getBoundingClientRect();
-                const x = ((event.clientX - rect.left) / rect.width) * 100;
-                const y = ((event.clientY - rect.top) / rect.height) * 100;
-                event.currentTarget.style.setProperty('--mx', `${x}%`);
-                event.currentTarget.style.setProperty('--my', `${y}%`);
+              isHovered={
+                isHovered
+              }
+              onMouseMove={(
+                event
+              ) => {
+                if (
+                  !hoverCapableRef.current
+                ) {
+                  return;
+                }
+
+                const rect =
+                  event.currentTarget.getBoundingClientRect();
+
+                const x =
+                  ((event.clientX -
+                    rect.left) /
+                    rect.width) *
+                  100;
+
+                const y =
+                  ((event.clientY -
+                    rect.top) /
+                    rect.height) *
+                  100;
+
+                event.currentTarget.style.setProperty(
+                  '--mx',
+                  `${x}%`
+                );
+
+                event.currentTarget.style.setProperty(
+                  '--my',
+                  `${y}%`
+                );
               }}
             />
           </div>
