@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  output: 'export',
   images: {
-    remotePatterns: []
-  }
+    unoptimized: true,
+  },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
