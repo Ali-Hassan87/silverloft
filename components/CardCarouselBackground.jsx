@@ -158,6 +158,7 @@ function PhoneMockup({
   link,
   isHovered,
   onMouseMove,
+  priority = false,
 }) {
   const handlePreviewClick = (event) => {
     event.stopPropagation();
@@ -288,7 +289,7 @@ function PhoneMockup({
             src={image}
             alt={label}
             draggable="false"
-            loading="eager"
+            loading={priority ? 'eager' : 'lazy'}
             decoding="async"
             className="
               absolute
@@ -888,6 +889,8 @@ export default function CardCarouselBackground() {
     let last =
       performance.now();
 
+    let started = false;
+
     const tick = (now) => {
       const dt = Math.min(
         (now - last) / 1000,
@@ -1104,14 +1107,49 @@ export default function CardCarouselBackground() {
         requestAnimationFrame(tick);
     };
 
-    rafRef.current =
-      requestAnimationFrame(tick);
+    const start = () => {
+      if (started) return;
+      started = true;
+      last = performance.now();
+      rafRef.current =
+        requestAnimationFrame(tick);
+    };
+
+    let idleId;
+    let timeoutId;
+
+    if (
+      typeof window.requestIdleCallback ===
+      'function'
+    ) {
+      idleId = window.requestIdleCallback(
+        start,
+        { timeout: 300 }
+      );
+    } else {
+      timeoutId = window.setTimeout(
+        start,
+        150
+      );
+    }
 
     return () => {
       if (rafRef.current) {
         cancelAnimationFrame(
           rafRef.current
         );
+      }
+
+      if (
+        idleId !== undefined &&
+        typeof window.cancelIdleCallback ===
+          'function'
+      ) {
+        window.cancelIdleCallback(idleId);
+      }
+
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId);
       }
     };
   }, [reducedMotion]);
@@ -1269,6 +1307,7 @@ export default function CardCarouselBackground() {
           >
             <PhoneMockup
               {...project}
+              priority={index < CARDS.length}
               isHovered={
                 isHovered
               }

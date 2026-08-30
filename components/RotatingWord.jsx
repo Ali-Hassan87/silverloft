@@ -90,10 +90,23 @@ const letterVariants = {
     scale: 1,
     filter: 'blur(0px)',
     transition: {
-      type: 'spring',
-      stiffness: 320,
-      damping: 13,
-      mass: 0.8,
+      // Spring stays on the transform properties for the "pop" bounce.
+      default: {
+        type: 'spring',
+        stiffness: 320,
+        damping: 13,
+        mass: 0.8,
+      },
+      // Filter gets its own non-overshooting tween: a spring settling
+      // on blur(0px) briefly overshoots past zero, which produces an
+      // invalid negative blur() value (e.g. blur(-1.3px)) on every
+      // animation frame — that's what was flooding the console with
+      // "Invalid keyframe value for property filter" warnings.
+      filter: {
+        type: 'tween',
+        duration: 0.32,
+        ease: 'easeOut',
+      },
     },
   },
 

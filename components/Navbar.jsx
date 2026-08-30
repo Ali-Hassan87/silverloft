@@ -25,6 +25,7 @@ export default function Navbar() {
 
   const linkRefs = useRef({});
   const listRef = useRef(null);
+  const mobileNavRef = useRef(null);
 
   /*
    * Active route
@@ -130,6 +131,20 @@ export default function Navbar() {
    * Close mobile menu after route change
    */
   useEffect(() => {
+    // If focus is still inside the mobile nav (e.g. the link that was
+    // just clicked to navigate), move it out BEFORE aria-hidden gets
+    // applied below — otherwise the browser blocks it because a
+    // hidden ancestor can't contain a focused descendant.
+    const activeEl = document.activeElement;
+
+    if (
+      mobileNavRef.current &&
+      activeEl &&
+      mobileNavRef.current.contains(activeEl)
+    ) {
+      activeEl.blur();
+    }
+
     setMenuOpen(false);
 
     window.scrollTo({
@@ -198,7 +213,8 @@ export default function Navbar() {
     setHoveredKey(null);
   };
 
-  const handleMobileLinkClick = () => {
+  const handleMobileLinkClick = (event) => {
+    event.currentTarget.blur();
     setMenuOpen(false);
   };
 
@@ -705,6 +721,7 @@ export default function Navbar() {
         {/* Mobile menu */}
         <div
           id="mobile-navigation"
+          ref={mobileNavRef}
           aria-hidden={!menuOpen}
           className={`
             mt-2 overflow-hidden
