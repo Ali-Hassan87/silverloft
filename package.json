@@ -2,6 +2,10 @@
   "name": "silverloft-site",
   "version": "1.0.0",
   "private": true,
+  "description": "Next.js (App Router) + Tailwind CSS. Plain JSX, no TypeScript.",
+  "license": "ISC",
+  "author": "",
+
   "scripts": {
     "dev": "next dev",
     "build": "next build",

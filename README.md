@@ -51,8 +51,7 @@ public/
   where the Vercel link goes for the Live Demo button).
 - **Founders** (`components/Founders.jsx`): placeholder initials-avatars for
   the 3 of you — swap in real photos and names.
-- **Email**: set to `silverloft111@gmail.com` (fixed the `.com` typo from
-  your message — let me know if the address itself should be different).
+- **Email**: set to `contact@silverloft.me`.
 - **LinkedIn URL**: currently a placeholder `linkedin.com` link in Navbar.jsx
   and Footer.jsx — drop in the real company page URL.
 

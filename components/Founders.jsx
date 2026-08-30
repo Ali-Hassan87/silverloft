@@ -28,14 +28,14 @@ const FOUNDERS = [
     portfolio: 'https://my-portfolio-silverloft.vercel.app/',
   },
   {
-    name: 'Muhammad Faizan',
+    name: 'Hafiz Faizan',
     role: 'Co-Founder · Full-Stack Developer',
     initials: 'MF',
     image: '/founders/fazy.png',
-    focus: 'Product & Integrations',
+    focus: 'Product, Integrations & Security',
     objectPosition: 'center top',
     github: 'Https://www.github.com/fazy777',
-    linkedin: 'Https://www.safesilverloft.dev',
+    linkedin: 'https://www.linkedin.com/in/muhammad-faizan-ali-546538374',
     portfolio: 'Https://www.safesilverloft.dev',
   },
 ];
