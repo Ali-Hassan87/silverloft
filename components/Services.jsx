@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import GlareHover from './GlareHover';
+import { useInView } from '@/lib/useInView';
 
 const SERVICES = [
   {
@@ -29,39 +30,6 @@ const SERVICES = [
     keyword: 'LAUNCH',
   },
 ];
-
-/* ================================================================
-   IN VIEW
-   ================================================================ */
-
-function useInView() {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-
-    if (!el) return;
-
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          obs.disconnect();
-        }
-      },
-      {
-        threshold: 0.15,
-      }
-    );
-
-    obs.observe(el);
-
-    return () => obs.disconnect();
-  }, []);
-
-  return [ref, inView];
-}
 
 /* ================================================================
    MAIN SERVICES

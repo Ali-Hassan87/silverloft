@@ -24,7 +24,8 @@ export const metadata = {
     'Silverloft is a small studio of full-stack developers building fast, premium websites for founders and brands who care about the details.',
 
   icons: {
-    icon: '/logo.png',
+    icon: '/logo.webp',
+    apple: '/logo.webp',
   },
 };
 
@@ -34,11 +35,10 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${display.variable} ${body.variable}`}
     >
-      <body className="overflow-x-hidden font-body antialiased ">
-        {/* <AuraBackground/> */}
-        <main className="relative z-10">
+      <body className="overflow-x-hidden font-body antialiased bg-paper text-ink">
+        <div className="relative z-10">
           {children}
-        </main>
+        </div>
       </body>
     </html>
   );

@@ -23,7 +23,7 @@ const PROJECTS = [
     tags: ['iOS / Android / Web App', 'FunTech'],
     theme: 'entertainment',
     href: 'https://slantyfix.vercel.app/',
-    videoSrc: '/projects/slantyfix_glare.gif',
+    videoSrc: '/projects/slantyfix_glare.mp4',
   },
 
   {
@@ -35,7 +35,7 @@ const PROJECTS = [
     tags: ['Web App / Android', 'AI / AdvanceTech'],
     theme: 'ai',
     href: 'https://worknest-silverloft.vercel.app/dashboard',
-    videoSrc: '/projects/netforce_glare.gif',
+    videoSrc: '/projects/netforce_glare.mp4',
   },
 
   {
@@ -47,7 +47,7 @@ const PROJECTS = [
     tags: ['Web App / Android', 'Productivity / Learning'],
     theme: 'productivity',
     href: 'https://lms-by-silver-loft.vercel.app/',
-    videoSrc: '/projects/learningsystem_glare.gif',
+    videoSrc: '/projects/learningsystem_glare.mp4',
   },
 ];
 
@@ -140,79 +140,6 @@ function WorkIntro() {
     </div>
   );
 }
-
-/*
-|--------------------------------------------------------------------------
-| DESKTOP SIDE PROGRESS
-|--------------------------------------------------------------------------
-*/
-
-// function WorkProgress({ active }) {
-//   return (
-//     <aside className="pointer-events-none fixed right-7 top-1/2 z-50 hidden -translate-y-1/2 xl:block">
-//       <div className="flex flex-col items-end gap-5">
-//         {PROJECTS.map((project, index) => {
-//           const activeItem = index === active;
-//           const theme =
-//             THEMES[project.theme] || THEMES.entertainment;
-
-//           return (
-//             <div
-//               key={project.caseNumber}
-//               className="flex items-center gap-3"
-//             >
-//               <span
-//                 className={[
-//                   'max-w-[150px] text-right text-[8px] font-semibold',
-//                   'uppercase tracking-[0.2em]',
-//                   'transition-all duration-700',
-//                   activeItem
-//                     ? 'translate-x-0 opacity-100'
-//                     : 'translate-x-3 opacity-0',
-//                 ].join(' ')}
-//                 style={{
-//                   color: activeItem
-//                     ? theme.accent
-//                     : undefined,
-//                 }}
-//               >
-//                 {project.subtitle}
-//               </span>
-
-//               <span
-//                 className={[
-//                   'h-px transition-all duration-700',
-//                   activeItem
-//                     ? 'w-12'
-//                     : 'w-3 bg-ink/10',
-//                 ].join(' ')}
-//                 style={
-//                   activeItem
-//                     ? {
-//                         backgroundColor: theme.accent,
-//                       }
-//                     : undefined
-//                 }
-//               />
-
-//               <span
-//                 className={[
-//                   'font-display text-[11px]',
-//                   'transition-all duration-700',
-//                   activeItem
-//                     ? 'text-ink'
-//                     : 'text-ink/20',
-//                 ].join(' ')}
-//               >
-//                 {project.caseNumber}
-//               </span>
-//             </div>
-//           );
-//         })}
-//       </div>
-//     </aside>
-//   );
-// }
 
 /*
 |--------------------------------------------------------------------------

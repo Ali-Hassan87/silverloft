@@ -169,85 +169,31 @@ export default function Hero() {
 
   return (
     <section
-      className="
-        hero-section
-        relative
-        flex
-        min-h-0
-        flex-col
-        overflow-hidden
-        pt-24
-
-        sm:pt-28
-
-        md:min-h-[100svh]
-      "
+      className="hero-section relative flex min-h-0 flex-col overflow-hidden pt-24 sm:pt-28 md:min-h-[100svh]"
     >
       {/* =========================================================
           AMBIENT DEPTH
           ========================================================= */}
 
       <div
-        className="
-          pointer-events-none
-          absolute
-          inset-0
-          z-0
-          overflow-hidden
-        "
+        className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       >
         {/* Left warm glow */}
 
         <div
-          className="
-            blob-drift-a
-            absolute
-            -left-24
-            top-6
-            h-72
-            w-72
-            rounded-full
-            bg-gradient-to-br
-            from-amber-200/25
-            via-orange-100/15
-            to-transparent
-            blur-3xl
-          "
+          className="blob-drift-a absolute -left-24 top-6 h-72 w-72 rounded-full bg-gradient-to-br from-amber-200/25 via-orange-100/15 to-transparent blur-3xl"
         />
 
         {/* Right cool glow */}
 
         <div
-          className="
-            blob-drift-b
-            absolute
-            -right-20
-            top-44
-            h-80
-            w-80
-            rounded-full
-            bg-gradient-to-bl
-            from-sky-200/20
-            via-indigo-100/10
-            to-transparent
-            blur-3xl
-          "
+          className="blob-drift-b absolute -right-20 top-44 h-80 w-80 rounded-full bg-gradient-to-bl from-sky-200/20 via-indigo-100/10 to-transparent blur-3xl"
         />
 
         {/* Very subtle center atmosphere */}
 
         <div
-          className="
-            absolute
-            left-1/2
-            top-[38%]
-            h-[280px]
-            w-[520px]
-            -translate-x-1/2
-            rounded-full
-            bg-white/15
-            blur-[100px]
-          "
+          className="absolute left-1/2 top-[38%] h-[280px] w-[520px] -translate-x-1/2 rounded-full bg-white/15 blur-[100px]"
         />
       </div>
 
@@ -265,36 +211,7 @@ export default function Hero() {
           ========================================================= */}
 
       <div
-        className="
-          pointer-events-none
-          absolute
-          inset-x-0
-          top-[145px]
-          z-0
-          h-[330px]
-          origin-top
-          scale-[0.78]
-
-          sm:top-[155px]
-          sm:h-[430px]
-          sm:scale-[0.82]
-
-          md:top-[175px]
-          md:h-[560px]
-          md:scale-[0.86]
-
-          lg:top-[188px]
-          lg:h-[650px]
-          lg:scale-[0.82]
-
-          xl:top-[195px]
-          xl:h-[675px]
-          xl:scale-[0.84]
-
-          2xl:top-[198px]
-          2xl:h-[700px]
-          2xl:scale-[0.87]
-        "
+        className="pointer-events-none absolute inset-x-0 top-[159px] z-0 h-[330px] origin-top scale-[0.78] sm:top-[155px] sm:h-[430px] sm:scale-[0.82] md:top-[175px] md:h-[560px] md:scale-[0.86] lg:top-[188px] lg:h-[650px] lg:scale-[0.82] xl:top-[195px] xl:h-[675px] xl:scale-[0.84] 2xl:top-[198px] 2xl:h-[700px] 2xl:scale-[0.87]"
         style={{
           WebkitMaskImage:
             'linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%)',
@@ -311,67 +228,23 @@ export default function Hero() {
           ========================================================= */}
 
       <div
-        className="
-          hero-fade-in
-          relative
-          z-40
-          mx-auto
-          mb-2
-        "
+        className="hero-fade-in relative z-40 mx-auto mb-2"
         style={{
           animationDelay: '0ms',
         }}
       >
         <div
-          className="
-            mx-auto
-            flex
-            w-fit
-            items-center
-            gap-2
-            rounded-full
-            border
-            border-ink/10
-            bg-paper/75
-            px-3
-            py-1
-            text-[11px]
-            font-medium
-            text-ink/60
-            shadow-sm
-            backdrop-blur-md
-          "
+          className="mx-auto flex w-fit items-center gap-2 rounded-full border border-ink/10 bg-paper/75 px-3 py-1 text-[11px] font-medium text-ink/60 shadow-sm backdrop-blur-md"
         >
           <span
-            className="
-              relative
-              flex
-              h-2
-              w-2
-            "
+            className="relative flex h-2 w-2"
           >
             <span
-              className="
-                absolute
-                inline-flex
-                h-full
-                w-full
-                animate-ping
-                rounded-full
-                bg-emerald-400
-                opacity-75
-              "
+              className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"
             />
 
             <span
-              className="
-                relative
-                inline-flex
-                h-2
-                w-2
-                rounded-full
-                bg-emerald-500
-              "
+              className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"
             />
           </span>
 
@@ -386,49 +259,16 @@ export default function Hero() {
           ========================================================= */}
 
       <div
-        className="
-          hero-fade-in
-          relative
-          z-40
-          mx-auto
-          w-full
-          max-w-6xl
-          px-6
-          text-center
-        "
+        className="hero-fade-in relative z-40 mx-auto w-full max-w-6xl px-6 text-center"
         style={{
           animationDelay: '80ms',
         }}
       >
         <h1
-          className="
-            hero-headline
-            overflow-visible
-            font-display
-            leading-[0.92]
-            tracking-tight
-            text-ink
-          "
+          className="hero-headline overflow-visible font-display leading-[0.92] tracking-tight text-ink"
         >
           <div
-            className="
-              flex
-              flex-nowrap
-              items-baseline
-              justify-center
-              gap-x-1.5
-              text-[clamp(1.6rem,8vw,2.5rem)]
-
-              sm:gap-x-3
-              sm:text-[clamp(2.25rem,7vw,3.25rem)]
-
-              md:gap-x-4
-              md:text-[5rem]
-
-              lg:text-[5.2rem]
-
-              xl:text-[5.5rem]
-            "
+            className="flex flex-nowrap items-baseline justify-center gap-x-1.5 text-[clamp(1.6rem,8vw,2.5rem)] sm:gap-x-3 sm:text-[clamp(2.25rem,7vw,3.25rem)] md:gap-x-4 md:text-[5rem] lg:text-[5.2rem] xl:text-[5.5rem]"
           >
             <RotatingWord
               curveTotal={totalLetters}
@@ -444,18 +284,13 @@ export default function Hero() {
             />
 
             <span
-              className="
-                inline-flex
-                shrink-0
-              "
+              className="inline-flex shrink-0"
             >
               {STATIC_WORD.split('').map(
                 (char, index) => (
                   <span
                     key={`ws-${index}`}
-                    className="
-                      shrink-0
-                    "
+                    className="shrink-0"
                     style={arcLetterStyle(
                       staticStartIndex +
                         index,
@@ -464,10 +299,7 @@ export default function Hero() {
                     )}
                   >
                     <span
-                      className="
-                        static-shine
-                        inline-block
-                      "
+                      className="static-shine inline-block"
                       style={{
                         animationDelay: `${index * 90}ms`,
                       }}
@@ -491,54 +323,17 @@ export default function Hero() {
           ========================================================= */}
 
       <div
-        className="
-          pointer-events-none
-          relative
-          z-30
-          mx-auto
-          mt-[-2px]
-          flex
-          w-full
-          max-w-6xl
-          flex-none
-          items-end
-          justify-center
-          px-6
-          pb-0
-
-          sm:mt-[-8px]
-          sm:pb-3
-
-          md:mt-[-18px]
-          md:flex-1
-          md:pb-17
-
-          lg:mt-[-10px]
-          lg:pb-6
-
-          xl:mt-[-8px]
-          xl:pb-4
-        "
+        className="pointer-events-none relative z-30 mx-auto mt-[6px] flex w-full max-w-6xl flex-none items-end justify-center px-6 pb-0 sm:mt-[-8px] sm:pb-3 md:mt-[-18px] md:flex-1 md:pb-17 lg:mt-[-10px] lg:pb-6 xl:mt-[-8px] xl:pb-4"
       >
         <div
-          className="
-            relative
-            flex
-            w-full
-            max-w-2xl
-            flex-col
-            items-center
-          "
+          className="relative flex w-full max-w-2xl flex-col items-center"
         >
           {/* =====================================================
               FADE-IN
               ===================================================== */}
 
           <div
-            className="
-              hero-fade-in
-              relative
-            "
+            className="hero-fade-in relative"
             style={{
               animationDelay: '160ms',
             }}
@@ -548,53 +343,14 @@ export default function Hero() {
                 =================================================== */}
 
             <div
-              className="
-                relative
-                translate-y-[10px]
-
-                sm:translate-y-[8px]
-
-                md:translate-y-[30px]
-
-                lg:translate-y-[32px]
-
-                xl:translate-y-[38px]
-
-                2xl:translate-y-[42px]
-              "
+              className="relative translate-y-[18px] sm:translate-y-[8px] md:translate-y-[30px] lg:translate-y-[32px] xl:translate-y-[38px] 2xl:translate-y-[42px]"
             >
               {/* =================================================
                   CHARACTER GLOW
                   ================================================= */}
 
               <div
-                className="
-                  glow-pulse
-                  pointer-events-none
-                  absolute
-                  left-1/2
-                  top-1/2
-                  z-0
-                  h-[210px]
-                  w-[210px]
-                  -translate-x-1/2
-                  -translate-y-1/2
-                  rounded-full
-                  bg-gradient-to-br
-                  from-ink/10
-                  via-ink/5
-                  to-transparent
-                  blur-3xl
-
-                  sm:h-[260px]
-                  sm:w-[260px]
-
-                  md:h-[340px]
-                  md:w-[340px]
-
-                  lg:h-[360px]
-                  lg:w-[360px]
-                "
+                className="glow-pulse pointer-events-none absolute left-1/2 top-1/2 z-0 h-[210px] w-[210px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-ink/10 via-ink/5 to-transparent blur-3xl sm:h-[260px] sm:w-[260px] md:h-[340px] md:w-[340px] lg:h-[360px] lg:w-[360px]"
               />
 
               {/* =================================================
@@ -602,33 +358,7 @@ export default function Hero() {
                   ================================================= */}
 
               <div
-                className="
-                  float-1
-                  pointer-events-none
-                  absolute
-                  -right-1
-                  top-3
-                  z-40
-                  rounded-full
-                  border
-                  border-ink/10
-                  bg-paper/80
-                  px-2
-                  py-1
-                  text-[8px]
-                  font-semibold
-                  uppercase
-                  tracking-wide
-                  text-ink/70
-                  shadow-md
-                  backdrop-blur-md
-
-                  sm:-right-8
-                  sm:top-10
-                  sm:px-3
-                  sm:py-1.5
-                  sm:text-[10px]
-                "
+                className="float-1 pointer-events-none absolute -right-1 top-3 z-40 rounded-full border border-ink/10 bg-paper/80 px-2 py-1 text-[8px] font-semibold uppercase tracking-wide text-ink/70 shadow-md backdrop-blur-md sm:-right-8 sm:top-10 sm:px-3 sm:py-1.5 sm:text-[10px]"
               >
                 Custom-Built ⚡
               </div>
@@ -638,33 +368,7 @@ export default function Hero() {
                   ================================================= */}
 
               <div
-                className="
-                  float-2
-                  pointer-events-none
-                  absolute
-                  -left-1
-                  bottom-14
-                  z-40
-                  rounded-full
-                  border
-                  border-ink/10
-                  bg-paper/80
-                  px-2
-                  py-1
-                  text-[8px]
-                  font-semibold
-                  uppercase
-                  tracking-wide
-                  text-ink/70
-                  shadow-md
-                  backdrop-blur-md
-
-                  sm:-left-10
-                  sm:bottom-28
-                  sm:px-3
-                  sm:py-1.5
-                  sm:text-[10px]
-                "
+                className="float-2 pointer-events-none absolute -left-1 bottom-14 z-40 rounded-full border border-ink/10 bg-paper/80 px-2 py-1 text-[8px] font-semibold uppercase tracking-wide text-ink/70 shadow-md backdrop-blur-md sm:-left-10 sm:bottom-28 sm:px-3 sm:py-1.5 sm:text-[10px]"
               >
                 Fast · Secure · Scalable
               </div>
@@ -678,31 +382,14 @@ export default function Hero() {
                   ================================================= */}
 
               <Image
-                src="/character_glare.gif"
+                src="/character_glare.webp"
                 alt="Silverloft founding developer, illustrated full-body portrait holding a laptop"
                 width={900}
                 height={1400}
                 priority
                 unoptimized
                 draggable="false"
-                className="
-                  h-auto
-                  w-full
-                  max-w-[210px]
-                  select-none
-                  object-contain
-                  drop-shadow-[0_25px_35px_rgba(10,10,10,0.25)]
-
-                  sm:max-w-[360px]
-
-                  md:max-w-[430px]
-
-                  lg:max-w-[430px]
-
-                  xl:max-w-[445px]
-
-                  2xl:max-w-[455px]
-                "
+                className="h-auto w-full max-w-[210px] select-none object-contain drop-shadow-[0_25px_35px_rgba(10,10,10,0.25)] sm:max-w-[360px] md:max-w-[430px] lg:max-w-[430px] xl:max-w-[445px] 2xl:max-w-[455px]"
               />
             </div>
           </div>
@@ -714,34 +401,7 @@ export default function Hero() {
           ========================================================= */}
 
       <div
-        className="
-          hero-fade-in
-          relative
-          z-50
-          mt-[-2px]
-          mb-3
-          flex
-          w-full
-          justify-end
-          pr-4
-          pointer-events-auto
-
-          sm:mt-[-10px]
-          sm:mb-5
-          sm:pr-6
-
-          md:mt-[-48px]
-          md:mb-9
-          md:pr-8
-
-          lg:mt-[-60px]
-          lg:mb-10
-          lg:pr-10
-
-          xl:mt-[-68px]
-
-          2xl:mt-[-72px]
-        "
+        className="hero-fade-in relative z-50 mt-[-2px] mb-3 flex w-full justify-end pr-4 pointer-events-auto sm:mt-[-10px] sm:mb-5 sm:pr-6 md:mt-[-48px] md:mb-9 md:pr-8 lg:mt-[-60px] lg:mb-10 lg:pr-10 xl:mt-[-68px] 2xl:mt-[-72px]"
         style={{
           animationDelay: '260ms',
         }}
@@ -749,50 +409,14 @@ export default function Hero() {
         <a
           href="#work"
           aria-label="Explore our work"
-          className="
-            explore-orb-control
-            group
-            relative
-            flex
-            h-[68px]
-            w-[68px]
-            items-center
-            justify-center
-
-            sm:h-[108px]
-            sm:w-[108px]
-
-            md:h-[108px]
-            md:w-[108px]
-
-            lg:h-[108px]
-            lg:w-[108px]
-
-            cursor-pointer
-            rounded-full
-
-            transition-all
-            duration-500
-            ease-out
-
-            hover:scale-110
-            active:scale-95
-          "
+          className="explore-orb-control group relative flex h-[68px] w-[68px] items-center justify-center sm:h-[108px] sm:w-[108px] md:h-[108px] md:w-[108px] lg:h-[108px] lg:w-[108px] cursor-pointer rounded-full transition-all duration-500 ease-out hover:scale-110 active:scale-95"
         >
           {/* =====================================================
               LOADER
               ===================================================== */}
 
           <div
-            className="
-              explore-loader-shell
-              pointer-events-none
-              relative
-              z-10
-              transition-all
-              duration-500
-              group-hover:drop-shadow-[0_0_28px_rgba(255,191,72,0.45)]
-            "
+            className="explore-loader-shell pointer-events-none relative z-10 transition-all duration-500 group-hover:drop-shadow-[0_0_28px_rgba(255,191,72,0.45)]"
           >
             <LoaderOrb
               size={1}
@@ -805,46 +429,16 @@ export default function Hero() {
               ===================================================== */}
 
           <div
-            className="
-              pointer-events-none
-              absolute
-              inset-0
-              z-30
-              flex
-              flex-col
-              items-center
-              justify-center
-              text-center
-            "
+            className="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-center text-center"
           >
             <span
-              className="
-                explore-center-title
-                text-[7px]
-                font-black
-                uppercase
-                leading-none
-                tracking-[0.12em]
-                text-white
-
-                sm:text-[13px]
-                md:text-[13px]
-              "
+              className="explore-center-title text-[7px] font-black uppercase leading-none tracking-[0.12em] text-white sm:text-[13px] md:text-[13px]"
             >
               Explore
             </span>
 
             <span
-              className="
-                mt-0.5
-                text-[8px]
-                font-bold
-                leading-none
-                text-white/90
-
-                sm:mt-1
-                sm:text-[11px]
-              "
+              className="mt-0.5 text-[8px] font-bold leading-none text-white/90 sm:mt-1 sm:text-[11px]"
             >
               ↓
             </span>
@@ -855,31 +449,7 @@ export default function Hero() {
               ===================================================== */}
 
           <span
-            className="
-              pointer-events-none
-              absolute
-              -bottom-7
-              left-1/2
-              z-40
-              -translate-x-1/2
-              whitespace-nowrap
-
-              text-[7px]
-              font-bold
-              uppercase
-              tracking-[0.18em]
-              text-ink/45
-
-              opacity-0
-              transition-all
-              duration-300
-
-              group-hover:translate-y-1
-              group-hover:opacity-100
-
-              sm:-bottom-8
-              sm:text-[8px]
-            "
+            className="pointer-events-none absolute -bottom-7 left-1/2 z-40 -translate-x-1/2 whitespace-nowrap text-[7px] font-bold uppercase tracking-[0.18em] text-ink/45 opacity-0 transition-all duration-300 group-hover:translate-y-1 group-hover:opacity-100 sm:-bottom-8 sm:text-[8px]"
           >
             Discover the work
           </span>

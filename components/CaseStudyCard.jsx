@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import LiveDemoButton from './LiveDemoButton';
+import { useInView } from '@/lib/useInView';
 
 /*
 |--------------------------------------------------------------------------
@@ -93,6 +94,16 @@ export default function CaseStudyCard({
 
   const [failed, setFailed] =
     useState(false);
+
+  /*
+  --------------------------------------------------------------------------
+  Defer the (below-the-fold) preview video/image until its card is actually
+  approaching the viewport, instead of every card's media downloading the
+  moment the page loads. The media stage below already reserves its own
+  space via aspectRatio, so this introduces no layout shift.
+  --------------------------------------------------------------------------
+  */
+  const [mediaRef, mediaInView] = useInView(0.1);
 
   const colors =
     THEMES[theme] ||
@@ -518,6 +529,7 @@ export default function CaseStudyCard({
                 ============================================================ */}
 
             <div
+              ref={mediaRef}
               className="
                 relative
                 overflow-hidden
@@ -555,6 +567,7 @@ export default function CaseStudyCard({
 
               {showMedia ? (
                 isVideo ? (
+                  mediaInView && (
                   <video
                     src={videoSrc}
                     autoPlay
@@ -579,11 +592,14 @@ export default function CaseStudyCard({
                       group-hover:scale-[1.035]
                     "
                   />
+                  )
                 ) : (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={videoSrc}
                     alt={`${title} preview`}
+                    loading="lazy"
+                    decoding="async"
                     onLoad={
                       handleImageLoad
                     }

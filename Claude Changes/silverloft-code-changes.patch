@@ -1,0 +1,223 @@
+diff --git a/components/CardCarouselBackground.jsx b/components/CardCarouselBackground.jsx
+index 02fee1d..11c35d8 100644
+--- a/components/CardCarouselBackground.jsx
++++ b/components/CardCarouselBackground.jsx
+@@ -15,21 +15,21 @@ const CARDS = [
+   {
+     id: 'ecommerce',
+     label: 'E-Commerce Site',
+-    image: '/projects/ecommerce.jpeg',
++    image: '/projects/ecommerce.webp',
+     link: 'https://loombloom.vercel.app/',
+   },
+ 
+   {
+     id: 'movie',
+     label: 'Movie Site',
+-    image: '/projects/movie.jpeg',
++    image: '/projects/movie.webp',
+     link: 'https://slantyfix.vercel.app/',
+   },
+ 
+   {
+     id: 'lms',
+     label: 'Learning Site',
+-    image: '/projects/lms.jpeg',
++    image: '/projects/lms.webp',
+     link: 'https://lms-by-silver-loft.vercel.app/',
+   },
+ 
+@@ -44,14 +44,14 @@ const CARDS = [
+   {
+     id: 'saas-site',
+     label: 'Saas Site',
+-    image: '/projects/saas.jpeg',
++    image: '/projects/saas.webp',
+     link: 'https://worknest-silverloft.vercel.app/dashboard',
+   },
+ 
+   {
+     id: 'authentication',
+     label: 'Authentication',
+-    image: '/projects/auth.jpeg',
++    image: '/projects/auth.webp',
+     link: 'http://incident-managment-system-seven.vercel.app/',
+   },
+ 
+@@ -66,14 +66,14 @@ const CARDS = [
+   {
+     id: 'fashion',
+     label: 'Fashion Site',
+-    image: '/projects/fashion.jpeg',
++    image: '/projects/fashion.webp',
+     link: 'https://thevelvetwardrobeby-silverloft.vercel.app/',
+   },
+ 
+   {
+     id: 'landing-page',
+     label: 'Landing Page',
+-    image: '/projects/wesale.png',
++    image: '/projects/wesale.webp',
+     link: 'https://we-sale.vercel.app/',
+   },
+ 
+diff --git a/components/CaseStudyCard.jsx b/components/CaseStudyCard.jsx
+index a759bbd..0eb6122 100644
+--- a/components/CaseStudyCard.jsx
++++ b/components/CaseStudyCard.jsx
+@@ -3,6 +3,7 @@
+ import { useState } from 'react';
+ 
+ import LiveDemoButton from './LiveDemoButton';
++import { useInView } from '@/lib/useInView';
+ 
+ /*
+ |--------------------------------------------------------------------------
+@@ -94,6 +95,16 @@ export default function CaseStudyCard({
+   const [failed, setFailed] =
+     useState(false);
+ 
++  /*
++  --------------------------------------------------------------------------
++  Defer the (below-the-fold) preview video/image until its card is actually
++  approaching the viewport, instead of every card's media downloading the
++  moment the page loads. The media stage below already reserves its own
++  space via aspectRatio, so this introduces no layout shift.
++  --------------------------------------------------------------------------
++  */
++  const [mediaRef, mediaInView] = useInView(0.1);
++
+   const colors =
+     THEMES[theme] ||
+     THEMES.entertainment;
+@@ -518,6 +529,7 @@ export default function CaseStudyCard({
+                 ============================================================ */}
+ 
+             <div
++              ref={mediaRef}
+               className="
+                 relative
+                 overflow-hidden
+@@ -555,6 +567,7 @@ export default function CaseStudyCard({
+ 
+               {showMedia ? (
+                 isVideo ? (
++                  mediaInView && (
+                   <video
+                     src={videoSrc}
+                     autoPlay
+@@ -579,11 +592,14 @@ export default function CaseStudyCard({
+                       group-hover:scale-[1.035]
+                     "
+                   />
++                  )
+                 ) : (
+                   // eslint-disable-next-line @next/next/no-img-element
+                   <img
+                     src={videoSrc}
+                     alt={`${title} preview`}
++                    loading="lazy"
++                    decoding="async"
+                     onLoad={
+                       handleImageLoad
+                     }
+diff --git a/components/Footer.jsx b/components/Footer.jsx
+index 0614676..1ec1fcc 100644
+--- a/components/Footer.jsx
++++ b/components/Footer.jsx
+@@ -68,7 +68,7 @@ export default function Footer() {
+             <div className="flex items-center gap-3">
+               <div className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/15 bg-paper/[0.04]">
+                 <Image
+-                  src="/logo.png"
++                  src="/logo.webp"
+                   alt="Silverloft logo"
+                   width={40}
+                   height={40}
+diff --git a/components/Founders.jsx b/components/Founders.jsx
+index f730497..f71b3a9 100644
+--- a/components/Founders.jsx
++++ b/components/Founders.jsx
+@@ -9,7 +9,7 @@ const FOUNDERS = [
+     name: 'Ali Hassan',
+     role: 'Co-Founder · Full-Stack Developer',
+     initials: 'AH',
+-    image: '/founders/ali.png',
++    image: '/founders/ali.webp',
+     focus: 'Frontend & UI Systems',
+     objectPosition: 'center top',
+     github: 'https://github.com/Ali-Hassan87',
+@@ -20,7 +20,7 @@ const FOUNDERS = [
+     name: 'Muhammad Hashir',
+     role: 'Co-Founder · Full-Stack Developer',
+     initials: 'MH',
+-    image: '/founders/hashir.png',
++    image: '/founders/hashir.webp',
+     focus: 'Backend & Infrastructure',
+     objectPosition: 'center top',
+     github: 'https://github.com/Muhammad-Hashir-786',
+@@ -31,7 +31,7 @@ const FOUNDERS = [
+     name: 'Hafiz Faizan',
+     role: 'Co-Founder · Full-Stack Developer',
+     initials: 'MF',
+-    image: '/founders/fazy.png',
++    image: '/founders/fazy.webp',
+     focus: 'Product, Integrations & Security',
+     objectPosition: 'center top',
+     github: 'Https://www.github.com/fazy777',
+diff --git a/components/Navbar.jsx b/components/Navbar.jsx
+index 11fca97..2511fd8 100644
+--- a/components/Navbar.jsx
++++ b/components/Navbar.jsx
+@@ -278,7 +278,7 @@ export default function Navbar() {
+               "
+             >
+               <Image
+-                src="/logo.png"
++                src="/logo.webp"
+                 alt="Silverloft"
+                 width={80}
+                 height={80}
+diff --git a/components/Work.jsx b/components/Work.jsx
+index da9d9f6..8f900ed 100644
+--- a/components/Work.jsx
++++ b/components/Work.jsx
+@@ -23,7 +23,7 @@ const PROJECTS = [
+     tags: ['iOS / Android / Web App', 'FunTech'],
+     theme: 'entertainment',
+     href: 'https://slantyfix.vercel.app/',
+-    videoSrc: '/projects/slantyfix_glare.gif',
++    videoSrc: '/projects/slantyfix_glare.mp4',
+   },
+ 
+   {
+@@ -35,7 +35,7 @@ const PROJECTS = [
+     tags: ['Web App / Android', 'AI / AdvanceTech'],
+     theme: 'ai',
+     href: 'https://worknest-silverloft.vercel.app/dashboard',
+-    videoSrc: '/projects/netforce_glare.gif',
++    videoSrc: '/projects/netforce_glare.mp4',
+   },
+ 
+   {
+@@ -47,7 +47,7 @@ const PROJECTS = [
+     tags: ['Web App / Android', 'Productivity / Learning'],
+     theme: 'productivity',
+     href: 'https://lms-by-silver-loft.vercel.app/',
+-    videoSrc: '/projects/learningsystem_glare.gif',
++    videoSrc: '/projects/learningsystem_glare.mp4',
+   },
+ ];
+ 
+diff --git a/package.json b/package.json
+index 06441dc..d176e0e 100644
+--- a/package.json
++++ b/package.json
+@@ -14,7 +14,6 @@
+   },
+   "dependencies": {
+     "framer-motion": "^11.11.17",
+-    "lenis": "^1.1.16",
+     "next": "14.2.35",
+     "next-themes": "^0.4.6",
+     "react": "^18.3.1",

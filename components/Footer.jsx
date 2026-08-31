@@ -68,7 +68,7 @@ export default function Footer() {
             <div className="flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/15 bg-paper/[0.04]">
                 <Image
-                  src="/logo.png"
+                  src="/logo.webp"
                   alt="Silverloft logo"
                   width={40}
                   height={40}

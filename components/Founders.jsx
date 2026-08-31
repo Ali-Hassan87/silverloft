@@ -1,15 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import GlareHover from './GlareHover';
+import { useInView } from '@/lib/useInView';
 
 const FOUNDERS = [
   {
     name: 'Ali Hassan',
     role: 'Co-Founder · Full-Stack Developer',
     initials: 'AH',
-    image: '/founders/ali.png',
+    image: '/founders/ali.webp',
     focus: 'Frontend & UI Systems',
     objectPosition: 'center top',
     github: 'https://github.com/Ali-Hassan87',
@@ -20,7 +20,7 @@ const FOUNDERS = [
     name: 'Muhammad Hashir',
     role: 'Co-Founder · Full-Stack Developer',
     initials: 'MH',
-    image: '/founders/hashir.png',
+    image: '/founders/hashir.webp',
     focus: 'Backend & Infrastructure',
     objectPosition: 'center top',
     github: 'https://github.com/Muhammad-Hashir-786',
@@ -31,7 +31,7 @@ const FOUNDERS = [
     name: 'Hafiz Faizan',
     role: 'Co-Founder · Full-Stack Developer',
     initials: 'MF',
-    image: '/founders/fazy.png',
+    image: '/founders/fazy.webp',
     focus: 'Product, Integrations & Security',
     objectPosition: 'center top',
     github: 'Https://www.github.com/fazy777',
@@ -39,33 +39,6 @@ const FOUNDERS = [
     portfolio: 'Https://www.safesilverloft.dev',
   },
 ];
-
-function useInView() {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-
-    if (!el) return;
-
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
-
-    obs.observe(el);
-
-    return () => obs.disconnect();
-  }, []);
-
-  return [ref, inView];
-}
 
 /* =========================================================
    SOCIAL / PORTFOLIO ICONS

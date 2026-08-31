@@ -1,6 +1,6 @@
 'use client';
 
-import { useInView } from '../lib/useInView';
+import { useInView } from '@/lib/useInView';
 
 export default function AboutHero() {
   const [badgeRef, badgeInView] = useInView();

@@ -39,10 +39,6 @@ module.exports = {
       }
     }
   },
-  colors: {
-    paper: '#0a0a0a',
-    ink: '#ffffff',
-  },
   plugins: []
 };
 

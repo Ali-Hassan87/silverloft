@@ -1,6 +1,6 @@
 'use client';
 
-import { useInView } from '../lib/useInView';
+import { useInView } from '@/lib/useInView';
 
 const STATS = [
   { label: 'Founders', value: '03' },

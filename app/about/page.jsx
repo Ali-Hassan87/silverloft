@@ -17,8 +17,8 @@ export default function AboutPage() {
       <main className="relative overflow-hidden pt-32 pb-10">
         <AboutHero />
         <AboutManifesto />
+        <Founders />
       </main>
-      <Founders />
       <Footer />
     </>
   );
