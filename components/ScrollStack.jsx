@@ -126,13 +126,16 @@ export function ScrollStackItem({
 |--------------------------------------------------------------------------
 | SCROLL STACK
 |--------------------------------------------------------------------------
-| Wrapper + global scroll listener.
+| Wrapper that clones each child with its index/total, plus the
+| onActiveChange callback. Each ScrollStackItem determines on its own,
+| via IntersectionObserver, whether it's the "dominant" (centered) card
+| and reports that up through onActiveChange.
 |
-| The scroll listener is intentionally tiny:
-| it only detects which card is closest to the visual center.
-| No transform calculations are performed on every scroll frame.
-|
-| This keeps the section much smoother than a JS-heavy scroll animation.
+| Deliberately does NOT run its own scroll/resize listener here: reading
+| element positions on every scroll frame (getBoundingClientRect) forces
+| a synchronous layout recalculation on every frame, which is unnecessary
+| when the IntersectionObserver in each item already reports the same
+| thing for free, off the main thread's critical path.
 |--------------------------------------------------------------------------
 */
 
@@ -143,112 +146,6 @@ export default function ScrollStack({
 }) {
   const items = Children.toArray(children);
   const containerRef = useRef(null);
-
-  useEffect(() => {
-    const container = containerRef.current;
-
-    if (!container || !onActiveChange) {
-      return undefined;
-    }
-
-    let ticking = false;
-
-    /*
-    ------------------------------------------------------------------------
-    Find active project
-    ------------------------------------------------------------------------
-    */
-
-    const updateActive = () => {
-      ticking = false;
-
-      const elements = Array.from(
-        container.querySelectorAll(
-          '[data-project-index]'
-        )
-      );
-
-      if (!elements.length) {
-        return;
-      }
-
-      const viewportCenter =
-        window.innerHeight / 2;
-
-      let closestIndex = 0;
-      let closestDistance = Infinity;
-
-      elements.forEach((element) => {
-        const rect =
-          element.getBoundingClientRect();
-
-        const center =
-          rect.top + rect.height / 2;
-
-        const distance = Math.abs(
-          center - viewportCenter
-        );
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-
-          closestIndex = Number(
-            element.dataset.projectIndex
-          );
-        }
-      });
-
-      onActiveChange(closestIndex);
-    };
-
-    /*
-    ------------------------------------------------------------------------
-    RAF throttle
-    ------------------------------------------------------------------------
-    */
-
-    const handleScroll = () => {
-      if (ticking) {
-        return;
-      }
-
-      ticking = true;
-
-      window.requestAnimationFrame(
-        updateActive
-      );
-    };
-
-    window.addEventListener(
-      'scroll',
-      handleScroll,
-      {
-        passive: true,
-      }
-    );
-
-    window.addEventListener(
-      'resize',
-      handleScroll,
-      {
-        passive: true,
-      }
-    );
-
-    updateActive();
-
-    return () => {
-      window.removeEventListener(
-        'scroll',
-        handleScroll
-      );
-
-      window.removeEventListener(
-        'resize',
-        handleScroll
-      );
-    };
-  }, [onActiveChange]);
 
   return (
     <>

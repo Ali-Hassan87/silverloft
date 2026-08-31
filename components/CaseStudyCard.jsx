@@ -89,8 +89,16 @@ export default function CaseStudyCard({
   href = '#',
   videoSrc,
 }) {
+  /*
+  --------------------------------------------------------------------------
+  Seed with the real project video ratio (640/426 ≈ 1.50), not a guessed
+  16/10 (1.6). The old guess caused a ~6% height snap on every card once
+  the video's actual metadata loaded — a measured CLS contributor flagged
+  by PageSpeed. Images fall back to their own measured ratio below anyway.
+  --------------------------------------------------------------------------
+  */
   const [ratio, setRatio] =
-    useState(16 / 10);
+    useState(640 / 426);
 
   const [failed, setFailed] =
     useState(false);

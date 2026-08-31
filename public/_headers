@@ -1,0 +1,20 @@
+# Long-lived cache headers for static, content-hashed-by-path assets.
+# GitHub Pages does not read this file (fixed ~10min Cache-Control, no
+# per-file override available) — this only takes effect if the site is
+# ever served from a host that honors _headers, e.g. Netlify or
+# Cloudflare Pages. Flagged by PageSpeed as "Use efficient cache
+# lifetimes" (~1MB opportunity); this is the fix for that host class.
+# On GitHub Pages, the real fix is fronting the domain with Cloudflare
+# and setting a Cache Rule / Edge TTL for /public assets.
+
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.mp4
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
