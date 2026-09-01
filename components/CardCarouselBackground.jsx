@@ -30,7 +30,7 @@ const CARDS = [
     id: 'lms',
     label: 'Learning Site',
     image: '/projects/lms.webp',
-    link: 'https://lms-by-silver-loft.vercel.app/',
+    link: 'https://lms.silverloft.me/',
   },
 
   {

@@ -34,9 +34,9 @@ const FOUNDERS = [
     image: '/founders/fazy.webp',
     focus: 'Product, Integrations & Security',
     objectPosition: 'center top',
-    github: 'Https://www.github.com/fazy777',
+    github: 'https://github.com/fazy777',
     linkedin: 'https://www.linkedin.com/in/muhammad-faizan-ali-546538374',
-    portfolio: 'Https://www.safesilverloft.dev',
+    portfolio: 'https://safesilverloft.dev',
   },
 ];
 

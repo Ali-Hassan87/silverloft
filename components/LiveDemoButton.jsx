@@ -18,6 +18,8 @@ const ACCENTS = {
   productivity: 'bg-[#173B67]',
 };
 
+import { trackEvent } from '@/lib/analytics';
+
 export default function LiveDemoButton({
   href = '#',
   label = 'Live Demo',
@@ -51,6 +53,12 @@ export default function LiveDemoButton({
       onClick={(e) => {
         if (isPlaceholder) {
           e.preventDefault();
+        } else {
+          trackEvent('live_demo_click', {
+            url: href,
+            label,
+            theme,
+          });
         }
       }}
       aria-disabled={isPlaceholder}

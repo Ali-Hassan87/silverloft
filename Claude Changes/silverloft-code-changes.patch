@@ -24,7 +24,7 @@ index 02fee1d..11c35d8 100644
      label: 'Learning Site',
 -    image: '/projects/lms.jpeg',
 +    image: '/projects/lms.webp',
-     link: 'https://lms-by-silver-loft.vercel.app/',
+     link: 'https://lms.silverloft.me/',
    },
  
 @@ -44,14 +44,14 @@ const CARDS = [
@@ -203,7 +203,7 @@ index da9d9f6..8f900ed 100644
 @@ -47,7 +47,7 @@ const PROJECTS = [
      tags: ['Web App / Android', 'Productivity / Learning'],
      theme: 'productivity',
-     href: 'https://lms-by-silver-loft.vercel.app/',
+     href: 'https://lms.silverloft.me/',
 -    videoSrc: '/projects/learningsystem_glare.gif',
 +    videoSrc: '/projects/learningsystem_glare.mp4',
    },

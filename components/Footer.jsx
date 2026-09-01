@@ -1,5 +1,8 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { trackEvent } from '@/lib/analytics';
 
 const SOCIALS = [
   {
@@ -136,6 +139,7 @@ export default function Footer() {
 
             <a
               href="mailto:contact@silverloft.me"
+              onClick={() => trackEvent('contact_click', { location: 'footer_email_link' })}
               className="group relative w-fit text-lg font-medium tracking-tight text-paper/80 transition-colors duration-300 hover:text-paper md:text-xl"
             >
               contact@silverloft.me
@@ -156,6 +160,7 @@ export default function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noreferrer"
+                  onClick={() => trackEvent('social_click', { platform: social.name })}
                   aria-label={`Silverloft on ${social.name}`}
                   className="group relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-paper/15 text-paper/55 transition-all duration-300 hover:-translate-y-1 hover:border-paper/40"
                 >
@@ -197,6 +202,7 @@ export default function Footer() {
 
             <a
               href="mailto:contact@silverloft.me"
+              onClick={() => trackEvent('cta_conversation_click', { location: 'footer_cta_banner' })}
               className="group flex w-fit items-center gap-3 rounded-full border border-paper/20 px-5 py-3 text-xs font-medium text-paper/75 transition-all duration-300 hover:border-paper/50 hover:bg-paper hover:text-ink"
             >
               Start a conversation
@@ -223,6 +229,16 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="relative border-t border-paper/10">
         <div className="mx-auto flex max-w-[1600px] flex-col items-center justify-center gap-4 px-6 py-8 text-center md:px-10">
+
+          <div className="flex flex-wrap items-center justify-center gap-4 text-[11px] text-paper/40">
+            <Link href="/privacy" className="transition-colors hover:text-paper">
+              Privacy Policy
+            </Link>
+            <span className="text-paper/20">•</span>
+            <Link href="/terms" className="transition-colors hover:text-paper">
+              Terms of Service
+            </Link>
+          </div>
 
           <p className="text-[10px] tracking-wide text-paper/30 md:text-xs">
             © {new Date().getFullYear()} Silverloft. Built by the people who built it.

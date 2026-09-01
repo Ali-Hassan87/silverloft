@@ -1,0 +1,31 @@
+name: Automated Uptime & SSL Health Check
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    name: Check Production Endpoint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping Live Site
+        run: |
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L https://silverloft.me)
+          echo "Live domain response code: $HTTP_CODE"
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "::error::Site responded with HTTP status $HTTP_CODE instead of 200"
+            exit 1
+          fi
+
+      - name: Verify Health Endpoint
+        run: |
+          HEALTH_STATUS=$(curl -s https://silverloft.me/health.json | grep -o '"status": *"healthy"')
+          if [ -z "$HEALTH_STATUS" ]; then
+            echo "::error::Health endpoint did not report healthy status"
+            exit 1
+          fi
+          echo "Health endpoint is active and healthy!"

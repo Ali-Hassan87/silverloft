@@ -46,7 +46,7 @@ const PROJECTS = [
       'A learning platform shaped around clarity, progress and a frictionless digital education experience.',
     tags: ['Web App / Android', 'Productivity / Learning'],
     theme: 'productivity',
-    href: 'https://lms-by-silver-loft.vercel.app/',
+    href: 'https://lms.silverloft.me/',
     videoSrc: '/projects/learningsystem_glare.mp4',
   },
 ];
