@@ -5,16 +5,16 @@ import AboutHero from '@/components/AboutHero';
 import AboutManifesto from '@/components/AboutManifesto';
 
 export const metadata = {
-  title: 'About',
+  title: 'About Our Studio & Full-Stack Developers',
   description:
-    'Silverloft is a three-person studio that designs, builds, and ships full-stack products end to end.',
+    'Meet the full-stack engineering team behind Silverloft. We design, engineer, and ship bespoke web applications, interactive interfaces, and scalable SaaS solutions.',
   alternates: {
     canonical: '/about',
   },
   openGraph: {
-    title: 'About — Silverloft',
+    title: 'About Our Studio & Full-Stack Developers — Silverloft',
     description:
-      'Silverloft is a three-person studio that designs, builds, and ships full-stack products end to end.',
+      'Meet the full-stack engineering team behind Silverloft. We design, engineer, and ship bespoke web applications, interactive interfaces, and scalable SaaS solutions.',
     url: 'https://silverloft.me/about',
   },
 };
